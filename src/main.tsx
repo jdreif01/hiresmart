@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Amplify } from 'aws-amplify';
 import App from './App';
+import amplifyOutputs from '../amplify_outputs.json';
 
 Amplify.configure({
+  ...amplifyOutputs,
   Auth: {
     Cognito: {
       userPoolId: 'us-west-2_BNtjQWLSQ',
