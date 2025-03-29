@@ -3,15 +3,13 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Amplify } from 'aws-amplify';
 import App from './App';
-//import awsExports from './aws-exports';
 
 Amplify.configure({
-  ...awsExports,
   Auth: {
     Cognito: {
       userPoolId: 'us-west-2_BNtjQWLSQ',
       userPoolClientId: '1ivfc9qcdm43j9286fq0fure85',
-      region: 'us-west-2',
+      //region: 'us-west-2',
       loginWith: {
         oauth: {
           domain: 'us-west-2bntjqwlsq.auth.us-west-2.amazoncognito.com',
