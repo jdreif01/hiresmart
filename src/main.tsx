@@ -5,26 +5,7 @@ import { Amplify } from 'aws-amplify';
 import App from './App';
 import amplifyOutputs from '../amplify_outputs.json';
 
-Amplify.configure({
-  ...amplifyOutputs,
-  Auth: {
-    Cognito: {
-      userPoolId: 'us-west-2_BNtjQWLSQ',
-      userPoolClientId: '1ivfc9qcdm43j9286fq0fure85',
-      //region: 'us-west-2',
-      loginWith: {
-        oauth: {
-          domain: 'us-west-2bntjqwlsq.auth.us-west-2.amazoncognito.com',
-          scopes: ['email', 'profile', 'openid'],
-          redirectSignIn: ['http://localhost:5173/organization-list', 'https://main.d2jtzratdb8oor.amplifyapp.com/organization-list'],
-          redirectSignOut: ['http://localhost:5173/organization-list', 'https://main.d2jtzratdb8oor.amplifyapp.com/organization-list'],
-          responseType: 'code',
-          providers: ['Google']
-        }
-      }
-    }
-  }
-});
+Amplify.configure(amplifyOutputs);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

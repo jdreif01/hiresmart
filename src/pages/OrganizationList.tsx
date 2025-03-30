@@ -32,10 +32,10 @@ const OrganizationList: React.FC = () => {
         console.log('ID token:', session.tokens?.idToken?.toString());
         const idTokenPayload = session.tokens?.idToken?.payload;
         console.log('ID Token Payload:', idTokenPayload);
-        const tenant = idTokenPayload?.['custom:tenantId'] as string;
+        const tenant = idTokenPayload?.['custom:tenantID'] as string;
         console.log('Fetched tenantId:', tenant);
         if (!tenant) {
-          console.error('custom:tenantId not found in ID token payload');
+          console.error('custom:tenantID not found in ID token payload');
         }
         setTenantId(tenant || '');
         setIsAuthenticated(true);
@@ -75,7 +75,7 @@ const OrganizationList: React.FC = () => {
             id: item.pk.split('#')[2],
             Name: item.data.Name,
             SSOProvider: item.data.SSOProvider,
-            TenantId: item.data.TenantId // Ensure this matches the schema's casing
+            TenantId: item.tenantId // Use top-level tenantId instead of data.TenantId
           }));
           setOrganizations(orgs);
           setErrorMessage('');

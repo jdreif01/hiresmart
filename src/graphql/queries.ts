@@ -17,7 +17,6 @@ export const getHireSmartItem = /* GraphQL */ `query GetHireSmartItem($id: ID!) 
     data {
       Name
       SSOProvider
-      TenantId
       RoleStatus
       CulturalValueStatus
       CompetencyStatus
@@ -66,6 +65,7 @@ export const getHireSmartItem = /* GraphQL */ `query GetHireSmartItem($id: ID!) 
   APITypes.GetHireSmartItemQueryVariables,
   APITypes.GetHireSmartItemQuery
 >;
+
 export const listHireSmartItems = /* GraphQL */ `query ListHireSmartItems(
   $filter: ModelHireSmartItemFilterInput
   $limit: Int
@@ -91,6 +91,7 @@ export const listHireSmartItems = /* GraphQL */ `query ListHireSmartItems(
   APITypes.ListHireSmartItemsQueryVariables,
   APITypes.ListHireSmartItemsQuery
 >;
+
 export const itemsByTenantId = /* GraphQL */ `query ItemsByTenantId(
   $tenantId: String!
   $sk: ModelStringKeyConditionInput
@@ -115,7 +116,6 @@ export const itemsByTenantId = /* GraphQL */ `query ItemsByTenantId(
       data {
         Name
         SSOProvider
-        TenantId
       }
       id
       createdAt
