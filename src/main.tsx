@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Amplify } from 'aws-amplify';
 import App from './App';
+import amplifyOutputsDev from '../amplify_outputs.json'; // Use ES Module import for dev
 
 // Use window.amplify_outputs if available (in hosted environments like staging, production)
-// Otherwise, fall back to local amplify_outputs.json for dev (sandbox)
-const amplifyOutputs = window.amplify_outputs || require('../amplify_outputs.json');
+// Otherwise, fall back to the imported amplify_outputs.json for dev (sandbox)
+const amplifyOutputs = window.amplify_outputs || amplifyOutputsDev;
 
 Amplify.configure(amplifyOutputs);
 
