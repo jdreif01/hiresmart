@@ -12,9 +12,7 @@ const redirectUris = {
 
 export const auth = defineAuth({
   loginWith: {
-    email: {
-      verificationEmailStyle: 'CODE'
-    },
+    email: undefined, // Disable Cognito User Pool login
     externalProviders: {
       callbackUrls: redirectUris[environment as keyof typeof redirectUris],
       logoutUrls: redirectUris[environment as keyof typeof redirectUris],
