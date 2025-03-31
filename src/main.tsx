@@ -5,18 +5,37 @@ import { Amplify } from 'aws-amplify';
 import App from './App';
 import amplifyOutputsDev from '../amplify_outputs.json'; // Use ES Module import for dev
 
-// Use window.amplify_outputs if available (in hosted environments like staging, production)
-// Otherwise, fall back to the imported amplify_outputs.json for dev (sandbox)
-const amplifyOutputs = window.amplify_outputs || amplifyOutputsDev;
+// Wait for window.amplify_outputs to be available
+const waitForAmplifyOutputs = async () => {
+  if (window.location.hostname.includes('localhost')) {
+    return amplifyOutputsDev;
+  }
 
-Amplify.configure(amplifyOutputs);
+  for (let i = 0; i < 10; i++) {
+    if (window.amplify_outputs) {
+      return window.amplify_outputs;
+    }
+    await new Promise(resolve => setTimeout(resolve, 100)); // Wait 100ms
+  }
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <Router>
-      <Routes>
-        <Route path="/*" element={<App />} />
-      </Routes>
-    </Router>
-  </React.StrictMode>
-);
+  throw new Error('Amplify outputs not found after waiting. Ensure Amplify Hosting is correctly configured.');
+};
+
+// Configure Amplify with the outputs
+waitForAmplifyOutputs().then(amplifyOutputs => {
+  console.log('Amplify Outputs:', amplifyOutputs); // Debug log
+
+  Amplify.configure(amplifyOutputs);
+
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+      <Router>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </Router>
+    </React.StrictMode>
+  );
+}).catch(error => {
+  console.error(error);
+});

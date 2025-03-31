@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "es2022",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "paths": {
+      "$amplify/*": [
+        "./amplify/generated/*"
+      ]
+    },
+    "lib": ["DOM", "DOM.Iterable", "ESNext"], // Add DOM for browser APIs like window
+    "jsx": "react-jsx", // Add JSX support for React
+    "allowJs": false,
+    "isolatedModules": true,
+    "noEmit": true
+  },
+  "include": ["src", "global.d.ts", "amplify"] // Include src, global.d.ts, and amplify directories
+}
