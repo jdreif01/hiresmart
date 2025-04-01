@@ -1,4 +1,4 @@
-import { defineAuth } from '@aws-amplify/backend';
+import { defineAuth, secret } from '@aws-amplify/backend';
 
 // Define environment-specific configurations
 const environment = process.env.AMPLIFY_ENV || 'dev'; // Default to 'dev' for sandbox
@@ -15,7 +15,12 @@ export const auth = defineAuth({
     email: {
       verificationEmailStyle: 'CODE' // Enable email login with verification code
     },
+    phone: undefined, // Explicitly disable phone login
     externalProviders: {
+      google: {
+        clientId: secret('GOOGLE_CLIENT_ID'),
+        clientSecret: secret('GOOGLE_CLIENT_SECRET')
+      },
       callbackUrls: redirectUris[environment as keyof typeof redirectUris],
       logoutUrls: redirectUris[environment as keyof typeof redirectUris],
       scopes: ['EMAIL', 'PROFILE', 'OPENID']
