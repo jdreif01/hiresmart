@@ -7,12 +7,14 @@ const environment = process.env.AMPLIFY_ENV || 'dev'; // Default to 'dev' for sa
 const redirectUris = {
   dev: ['http://localhost:5173/organization-list'],
   staging: ['https://staging.d31vtilon76l6i.amplifyapp.com/organization-list/'],
-  prod: ['https://main.<app-id>.amplifyapp.com/organization-list/'] // Placeholder for production
+  prod: ['https://main.d31vtilon76l6i.amplifyapp.com/organization-list/']
 };
 
 export const auth = defineAuth({
   loginWith: {
-    email: undefined, // Disable Cognito User Pool login
+    email: {
+      verificationEmailStyle: 'CODE' // Enable email login with verification code
+    },
     externalProviders: {
       callbackUrls: redirectUris[environment as keyof typeof redirectUris],
       logoutUrls: redirectUris[environment as keyof typeof redirectUris],
