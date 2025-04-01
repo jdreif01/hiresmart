@@ -19,7 +19,13 @@ export const auth = defineAuth({
     externalProviders: {
       google: {
         clientId: secret('GOOGLE_CLIENT_ID'),
-        clientSecret: secret('GOOGLE_CLIENT_SECRET')
+        clientSecret: secret('GOOGLE_CLIENT_SECRET'),
+        attributeMapping: {
+          email: 'email',
+          givenName: 'given_name',
+          familyName: 'family_name',
+          profilePicture: 'picture'
+        }
       },
       callbackUrls: redirectUris[environment as keyof typeof redirectUris],
       logoutUrls: redirectUris[environment as keyof typeof redirectUris],
