@@ -1,9 +1,7 @@
 import { defineAuth, secret } from '@aws-amplify/backend';
 
-// Define environment-specific configurations
-const environment = process.env.AMPLIFY_ENV || 'dev'; // Default to 'dev' for sandbox
+const environment = process.env.AMPLIFY_ENV || 'dev';
 
-// Define redirect URIs based on the environment
 const redirectUris = {
   dev: ['http://localhost:5173/organization-list'],
   staging: ['https://staging.d31vtilon76l6i.amplifyapp.com/organization-list/'],
@@ -13,9 +11,9 @@ const redirectUris = {
 export const auth = defineAuth({
   loginWith: {
     email: {
-      verificationEmailStyle: 'CODE' // Enable email login with verification code
+      verificationEmailStyle: 'CODE'
     },
-    phone: undefined, // Explicitly disable phone login
+    phone: undefined,
     externalProviders: {
       google: {
         clientId: secret('GOOGLE_CLIENT_ID'),
@@ -29,7 +27,7 @@ export const auth = defineAuth({
       },
       callbackUrls: redirectUris[environment as keyof typeof redirectUris],
       logoutUrls: redirectUris[environment as keyof typeof redirectUris],
-      scopes: ['EMAIL', 'PROFILE', 'OPENID']
+      scopes: ['EMAIL', 'PROFILE', 'OPENID'] // Use uppercase scopes
     }
   }
 });
