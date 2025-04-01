@@ -18,6 +18,7 @@ export const auth = defineAuth({
       google: {
         clientId: secret('GOOGLE_CLIENT_ID'),
         clientSecret: secret('GOOGLE_CLIENT_SECRET'),
+        scopes: ['email', 'profile', 'openid'], // Use uppercase scopes
         attributeMapping: {
           email: 'email',
           givenName: 'given_name',
@@ -27,7 +28,7 @@ export const auth = defineAuth({
       },
       callbackUrls: redirectUris[environment as keyof typeof redirectUris],
       logoutUrls: redirectUris[environment as keyof typeof redirectUris],
-      scopes: ['EMAIL', 'PROFILE', 'OPENID'] // Use uppercase scopes
+      //scopes: ['email', 'profile', 'openid'] // Use uppercase scopes
     }
   }
 });
