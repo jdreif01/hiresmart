@@ -28,7 +28,12 @@ export const auth = defineAuth({
       },
       callbackUrls: redirectUris[environment as keyof typeof redirectUris],
       logoutUrls: redirectUris[environment as keyof typeof redirectUris],
-      //scopes: ['email', 'profile', 'openid'] // Use uppercase scopes
+    }
+  },
+  userAttributes: {
+    "custom:tenantId": {
+      dataType: "String",
+      mutable: true,
     }
   }
 });
