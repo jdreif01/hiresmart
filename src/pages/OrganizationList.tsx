@@ -32,10 +32,10 @@ const OrganizationList: React.FC = () => {
         console.log('ID token:', session.tokens?.idToken?.toString());
         const idTokenPayload = session.tokens?.idToken?.payload;
         console.log('ID Token Payload:', idTokenPayload);
-        const tenant = idTokenPayload?.['custom:tenantID'] as string;
+        const tenant = idTokenPayload?.['custom:tenantId'] as string;
         console.log('Fetched tenantId:', tenant);
         if (!tenant) {
-          console.error('custom:tenantID not found in ID token payload');
+          console.error('custom:tenantId not found in ID token payload');
         }
         setTenantId(tenant || '');
         setIsAuthenticated(true);
