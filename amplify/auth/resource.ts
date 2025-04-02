@@ -1,4 +1,5 @@
 import { defineAuth, secret } from '@aws-amplify/backend';
+import { setTenantIdPostAuth } from '../functions/resource';
 
 const environment = process.env.AMPLIFY_ENV || 'dev';
 
@@ -7,6 +8,8 @@ const redirectUris = {
   staging: ['https://staging.d1mjhvpisz36hi.amplifyapp.com/organization-list/'],
   prod: ['https://main.d31vtilon76l6i.amplifyapp.com/organization-list/']
 };
+
+console.log('AMPLIFY_ENV:', process.env.AMPLIFY_ENV, 'Environment:', environment); // Debug log
 
 export const auth = defineAuth({
   loginWith: {
@@ -18,7 +21,7 @@ export const auth = defineAuth({
       google: {
         clientId: secret('GOOGLE_CLIENT_ID'),
         clientSecret: secret('GOOGLE_CLIENT_SECRET'),
-        scopes: ['email', 'profile', 'openid'], // Use uppercase scopes
+        scopes: ['email', 'profile', 'openid'],
         attributeMapping: {
           email: 'email',
           givenName: 'given_name',
@@ -27,13 +30,16 @@ export const auth = defineAuth({
         }
       },
       callbackUrls: redirectUris[environment as keyof typeof redirectUris],
-      logoutUrls: redirectUris[environment as keyof typeof redirectUris],
+      logoutUrls: redirectUris[environment as keyof typeof redirectUris]
     }
   },
   userAttributes: {
     "custom:tenantId": {
       dataType: "String",
-      mutable: true,
+      mutable: true
     }
+  },
+  triggers: {
+    postAuthentication: setTenantIdPostAuth
   }
 });
