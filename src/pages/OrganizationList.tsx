@@ -72,7 +72,7 @@ const OrganizationList: React.FC = () => {
           setErrorMessage('No organizations found for this tenant.');
         } else {
           const orgs = items.map((item: any) => ({
-            id: item.pk.split('#')[2],
+            id: item.id, // Use item.id directly (e.g., "Organization#gmail")
             Name: item.data.Name,
             SSOProvider: item.data.SSOProvider,
             TenantId: item.tenantId // Use top-level tenantId instead of data.TenantId
@@ -101,15 +101,7 @@ const OrganizationList: React.FC = () => {
             <TableCell>Tenant ID</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
-          {organizations.map(org => (
-            <TableRow key={org.id}>
-              <TableCell>{org.Name}</TableCell>
-              <TableCell>{org.SSOProvider}</TableCell>
-              <TableCell>{org.TenantId}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+        <TableBody>{organizations.map(org => (<TableRow key={org.id}><TableCell>{org.Name}</TableCell><TableCell>{org.SSOProvider}</TableCell><TableCell>{org.TenantId}</TableCell></TableRow>))}</TableBody>
       </Table>
     </Flex>
   );

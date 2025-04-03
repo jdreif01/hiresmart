@@ -1,0 +1,146 @@
+[
+  {
+    "id": { "S": "Organization#gmail" },
+    "pk": { "S": "Organization#gmail" },
+    "sk": { "S": "Organization#gmail" },
+    "tenantId": { "S": "gmail" },
+    "entityType": { "S": "Organization" },
+    "data": {
+      "M": {
+        "Name": { "S": "Gmail Org" },
+        "SSOProvider": { "S": "GoogleWorkspace" }
+      }
+    },
+    "createdAt": { "S": "2025-04-01T12:00:00Z" },
+    "updatedAt": { "S": "2025-04-01T12:00:00Z" },
+    "owner": { "S": "google_106341676604736758608" }
+  },
+  {
+    "id": { "S": "role#gmail#1" },
+    "pk": { "S": "role#gmail" },
+    "sk": { "S": "role#1" },
+    "tenantId": { "S": "gmail" },
+    "entityType": { "S": "Role" },
+    "data": {
+      "M": {
+        "Name": { "S": "Software Engineer" },
+        "RoleStatus": { "S": "Active" }
+      }
+    },
+    "createdAt": { "S": "2025-04-01T12:00:00Z" },
+    "updatedAt": { "S": "2025-04-01T12:00:00Z" },
+    "owner": { "S": "google_106341676604736758608" }
+  },
+  {
+    "id": { "S": "position#gmail#1" },
+    "pk": { "S": "position#gmail" },
+    "sk": { "S": "position#1" },
+    "tenantId": { "S": "gmail" },
+    "entityType": { "S": "Position" },
+    "data": {
+      "M": {
+        "Name": { "S": "Senior Software Engineer" },
+        "PositionStatus": { "S": "Open" }
+      }
+    },
+    "createdAt": { "S": "2025-04-01T12:00:00Z" },
+    "updatedAt": { "S": "2025-04-01T12:00:00Z" },
+    "owner": { "S": "google_106341676604736758608" }
+  },
+  {
+    "id": { "S": "Organization#flatironsequity" },
+    "pk": { "S": "Organization#flatironsequity" },
+    "sk": { "S": "Organization#flatironsequity" },
+    "tenantId": { "S": "flatironsequity" },
+    "entityType": { "S": "Organization" },
+    "data": {
+      "M": {
+        "Name": { "S": "Flatirons Equity Org" },
+        "SSOProvider": { "S": "GoogleWorkspace" }
+      }
+    },
+    "createdAt": { "S": "2025-04-01T12:00:00Z" },
+    "updatedAt": { "S": "2025-04-01T12:00:00Z" },
+    "owner": { "S": "google_107571531995806505390" }
+  },
+  {
+    "id": { "S": "role#flatironsequity#1" },
+    "pk": { "S": "role#flatironsequity" },
+    "sk": { "S": "role#1" },
+    "tenantId": { "S": "flatironsequity" },
+    "entityType": { "S": "Role" },
+    "data": {
+      "M": {
+        "Name": { "S": "Product Manager" },
+        "RoleStatus": { "S": "Active" }
+      }
+    },
+    "createdAt": { "S": "2025-04-01T12:00:00Z" },
+    "updatedAt": { "S": "2025-04-01T12:00:00Z" },
+    "owner": { "S": "google_107571531995806505390" }
+  },
+  {
+    "id": { "S": "position#flatironsequity#1" },
+    "pk": { "S": "position#flatironsequity" },
+    "sk": { "S": "position#1" },
+    "tenantId": { "S": "flatironsequity" },
+    "entityType": { "S": "Position" },
+    "data": {
+      "M": {
+        "Name": { "S": "Senior Product Manager" },
+        "PositionStatus": { "S": "Open" }
+      }
+    },
+    "createdAt": { "S": "2025-04-01T12:00:00Z" },
+    "updatedAt": { "S": "2025-04-01T12:00:00Z" },
+    "owner": { "S": "google_107571531995806505390" }
+  },
+  {
+    "id": { "S": "Organization#teresareif" },
+    "pk": { "S": "Organization#teresareif" },
+    "sk": { "S": "Organization#teresareif" },
+    "tenantId": { "S": "teresareif" },
+    "entityType": { "S": "Organization" },
+    "data": {
+      "M": {
+        "Name": { "S": "Teresa Reif Org" },
+        "SSOProvider": { "S": "GoogleWorkspace" }
+      }
+    },
+    "createdAt": { "S": "2025-04-01T12:00:00Z" },
+    "updatedAt": { "S": "2025-04-01T12:00:00Z" },
+    "owner": { "S": "google_108648272568178074407" }
+  },
+  {
+    "id": { "S": "role#teresareif#1" },
+    "pk": { "S": "role#teresareif" },
+    "sk": { "S": "role#1" },
+    "tenantId": { "S": "teresareif" },
+    "entityType": { "S": "Role" },
+    "data": {
+      "M": {
+        "Name": { "S": "Designer" },
+        "RoleStatus": { "S": "Active" }
+      }
+    },
+    "createdAt": { "S": "2025-04-01T12:00:00Z" },
+    "updatedAt": { "S": "2025-04-01T12:00:00Z" },
+    "owner": { "S": "google_108648272568178074407" }
+  },
+  {
+    "id": { "S": "position#teresareif#1" },
+    "pk": { "S": "position#teresareif" },
+    "sk": { "S": "position#1" },
+    "tenantId": { "S": "teresareif" },
+    "entityType": { "S": "Position" },
+    "data": {
+      "M": {
+        "Name": { "S": "Senior Designer" },
+        "PositionStatus": { "S": "Open" }
+      }
+    },
+    "createdAt": { "S": "2025-04-01T12:00:00Z" },
+    "updatedAt": { "S": "2025-04-01T12:00:00Z" },
+    "owner": { "S": "google_108648272568178074407" }
+  }
+]

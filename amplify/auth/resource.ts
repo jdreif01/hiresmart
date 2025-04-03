@@ -40,6 +40,9 @@ export const auth = defineAuth({
     }
   },
   triggers: {
-    postAuthentication: setTenantIdPostAuth
-  }
+    postConfirmation: setTenantIdPostAuth
+  },
+  access: (allow) => [
+    allow.resource(setTenantIdPostAuth).to(['manageUsers'])
+  ]
 });
