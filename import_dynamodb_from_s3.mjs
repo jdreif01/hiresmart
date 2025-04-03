@@ -4,7 +4,7 @@ import { DynamoDBClient, BatchWriteItemCommand } from '@aws-sdk/client-dynamodb'
 const s3Client = new S3Client({ region: 'us-west-2' });
 const dynamoDBClient = new DynamoDBClient({ region: 'us-west-2' });
 
-const TABLE_NAME = 'HireSmartItem-2omltu24dndclonzlvfmws753i-NONE'; // Replace with your table name
+const TABLE_NAME = 'HireSmartItem-nekyinmpwbbefkx435oxrkzkmu-NONE'; // Replace with your table name
 const S3_BUCKET = 'hiresmart-test-data-bucket';
 const S3_KEY = 'hiresmart_test_data_dynamodb.json';
 

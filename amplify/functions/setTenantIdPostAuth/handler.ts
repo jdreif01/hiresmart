@@ -1,12 +1,14 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { PostConfirmationTriggerEvent } from 'aws-lambda';
 
+console.log('Imported CognitoIdentityProvider:', CognitoIdentityProvider); // Debug log
+
 const cognito = new CognitoIdentityProvider();
 
 export const handler = async (event: PostConfirmationTriggerEvent) => {
   console.log('Lambda function invoked with event:', JSON.stringify(event, null, 2));
 
-  const userPoolId: string = event.userPoolId; // Get the User Pool ID from the event
+  const userPoolId: string = event.userPoolId;
   const userName: string = event.userName;
   const email: string = event.request.userAttributes.email;
 
