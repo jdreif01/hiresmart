@@ -5,7 +5,7 @@ const environment = process.env.AMPLIFY_ENV || 'dev';
 
 const redirectUris = {
   dev: ['http://localhost:5173/organization-list'],
-  staging: ['https://staging.d1mjhvpisz36hi.amplifyapp.com/organization-list/'],
+  staging: ['https://staging.d3099jv2b6da5v.amplifyapp.com/organization-list/'],
   prod: ['https://main.d31vtilon76l6i.amplifyapp.com/organization-list/']
 };
 
