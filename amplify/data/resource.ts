@@ -1,70 +1,101 @@
-import { a, defineData } from '@aws-amplify/backend';
-import { defineAuth } from '@aws-amplify/backend';
+import { a, defineData, type ClientSchema } from '@aws-amplify/backend';
 
-export const schema = a.schema({
-  HireSmartItem: a
+const schema = a.schema({
+  Organization: a
     .model({
-      id: a.id().required(),
-      pk: a.string().required(),
-      sk: a.string().required(),
       tenantId: a.string().required(),
-      entityType: a.string().required(),
-      data: a.customType({
-        Name: a.string(),
-        SSOProvider: a.string(),
-        RoleStatus: a.string(),
-        CulturalValueStatus: a.string(),
-        CompetencyStatus: a.string(),
-        Category: a.string(),
-        PositionStatus: a.string(),
-        CandidateNumber: a.string(),
-        Status: a.string(),
-        ResumeURL: a.string(),
-        LinkedInURL: a.string(),
-        ActivityCategory: a.string(),
-        StartTime: a.datetime(),
-        RawData: a.string(),
-        AISummary: a.string(),
-        Vote: a.string(),
-        Feedback: a.string(),
-        FacilitatorId: a.id(),
-        HiringManagerId: a.id(),
-        InterviewCategory: a.string(),
-        ScreeningVote: a.string(),
-        AssessmentType: a.string(),
-        InterviewerRole: a.string(),
-        Text: a.string(),
-        Source: a.string(),
-        QuestionStatus: a.string(),
-        QuestionCreatedDate: a.datetime(),
-        QuestionLastUpdated: a.datetime(),
-        RoleType: a.string(),
-        CombinedAISummary: a.string(),
-        FinalDecision: a.string(),
-        EvidenceCategory: a.string(),
-        EvidenceText: a.string(),
-        URL: a.string(),
-        Duration: a.integer(),
-        ExerciseResponse: a.string(),
-        Date: a.datetime()
-      }),
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-      owner: a.string()
+      name: a.string().required(),
+      ssoConfig: a.json(),
+      contactEmail: a.string(),
+      owner: a.string(),
     })
-    .secondaryIndexes((index) => [
-      index('tenantId')
-        .sortKeys(['sk'])
-        .queryField('itemsByTenantId')
-    ])
     .authorization((allow) => [
-      allow.ownerDefinedIn('owner')
-    ])
+      allow.owner(),
+      allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
+      allow.groups(['AppAdmins']).to(['create', 'read', 'update', 'delete']),
+    ]),
+
+  GlobalRole: a
+    .model({
+      name: a.string().required(),
+      functionalCompetencyIds: a.string().array(),
+      questionIds: a.string().array(),
+      culturalValueIds: a.string().array(),
+    })
+    .authorization((allow) => [
+      allow.groups(['AppAdmins']).to(['create', 'read', 'update', 'delete']),
+      allow.guest().to(['read']),
+    ]),
+
+  Role: a
+    .model({
+      tenantId: a.string().required(),
+      name: a.string().required(),
+      baseRoleId: a.id(),
+      functionalCompetencyIds: a.string().array(),
+      culturalValueIds: a.string().array(),
+      questionIds: a.string().array(),
+      aiSuggestedQuestions: a.string().array(),
+      status: a.string(),
+      approver: a.string(),
+      owner: a.string(),
+    })
+    .authorization((allow) => [
+      allow.owner(),
+      allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
+      allow.ownerDefinedIn('approver').to(['update']),
+    ]),
+
+  Position: a
+    .model({
+      tenantId: a.string().required(),
+      roleId: a.id().required(),
+      name: a.string().required(),
+      positionStatus: a.string(),
+      customCompetencyIds: a.string().array(),
+      customQuestionIds: a.string().array(),
+      aiSuggestedQuestions: a.string().array(),
+      hiringManager: a.string(),
+      approver: a.string(),
+      status: a.string(),
+      notifications: a.json(),
+      owner: a.string(),
+    })
+    .authorization((allow) => [
+      allow.owner(),
+      allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
+      allow.ownerDefinedIn('approver').to(['update']),
+      allow.ownerDefinedIn('sharedWith').to(['read']),
+    ]),
+
+  Candidate: a
+    .model({
+      tenantId: a.string().required(),
+      name: a.string().required(),
+      email: a.string(),
+      phone: a.string(),
+      resume: a.string(),
+      linkedIn: a.string(),
+      aiFitSummary: a.json(),
+      recruiter: a.string(),
+      notifications: a.json(),
+      owner: a.string(),
+    })
+    .authorization((allow) => [
+      allow.owner(),
+      allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
+      allow.ownerDefinedIn('sharedWith').to(['read']),
+    ]),
 });
+
+export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'userPool'
-  }
+    defaultAuthorizationMode: 'userPool',
+    apiKeyAuthorizationMode: {
+      expiresInDays: 30,
+    },
+  },
 });

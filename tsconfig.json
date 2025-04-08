@@ -1,23 +1,17 @@
 {
   "compilerOptions": {
-    "target": "es2022",
-    "module": "es2022",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "Node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "paths": {
-      "$amplify/*": [
-        "./amplify/generated/*"
-      ]
-    },
-    "lib": ["DOM", "DOM.Iterable", "ESNext"], // Add DOM for browser APIs like window
-    "jsx": "react-jsx", // Add JSX support for React
-    "allowJs": false,
-    "isolatedModules": true,
-    "noEmit": true
+    "outDir": "./dist",
+    "rootDir": "./",
+    "allowSyntheticDefaultImports": true,
+    "types": ["node", "vite/client"]
   },
-  "include": ["src", "global.d.ts", "amplify"] // Include src, global.d.ts, and amplify directories
+  "include": ["amplify/**/*.ts", "src/**/*.ts", "amplify/data/schema.graphql", "types/**/*.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }
