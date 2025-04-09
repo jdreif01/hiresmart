@@ -6,9 +6,20 @@ backend:
         - "nvm install 22"
         - "nvm use 22"
         - "npm install"
+        - "echo 'Node version: $(node --version)'"
+        - "echo 'npm version: $(npm --version)'"
+        - "echo 'ampx version: $(npx ampx --version)'"
+        - "echo 'Current directory: $(pwd)'"
+        - "echo 'Directory contents: $(ls -la)'"
+        - "echo 'Amplify directory contents: $(ls -la amplify)'"
+        - "echo 'Backend file contents: $(cat amplify/backend.ts || echo 'Failed to read backend.ts')'"
+        - "echo 'Auth resource contents: $(cat amplify/auth/resource.ts || echo 'Failed to read auth/resource.ts')'"
+        - "echo 'Data resource contents: $(cat amplify/data/resource.ts || echo 'Failed to read data/resource.ts')'"
+        - "echo 'Functions resource contents: $(cat amplify/functions/resource.ts || echo 'Failed to read functions/resource.ts')'"
+        - "echo 'Functions handler contents: $(cat amplify/functions/handler.ts || echo 'Failed to read functions/handler.ts')'"
     build:
       commands:
-        - "npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID"
+        - "npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID --debug"
 frontend:
   phases:
     preBuild:
