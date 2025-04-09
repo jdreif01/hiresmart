@@ -1,6 +1,0 @@
-{
-  "type": "module",
-  "dependencies": {
-    "@aws-amplify/cli": "^13.0.0"
-  }
-}
