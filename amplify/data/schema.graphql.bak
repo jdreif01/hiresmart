@@ -1,0 +1,375 @@
+# Organization (tenant-level entity)
+type Organization
+  @model
+  @auth(
+    rules: [
+      # Allow the owner (creator) to manage the organization
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow users within the same tenant to read organization data
+      { allow: owner, ownerField: "tenantId", identityClaim: "custom:tenantId", operations: [read] }
+      # Allow Application Administrators to manage organizations
+      { allow: groups, groups: ["AppAdmins"], operations: [create, read, update, delete] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "organizationByTenantId")
+  name: String!
+  ssoConfig: AWSJSON # Stores SSO/IdP details (e.g., metadata URL)
+  contactEmail: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# GlobalRole (system-wide, managed by Application Administrator)
+type GlobalRole
+  @model
+  @auth(
+    rules: [
+      # Allow Application Administrators to manage global roles
+      { allow: groups, groups: ["AppAdmins"], operations: [create, read, update, delete] }
+      # Allow all users to read global roles
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  functionalCompetencyIds: [String] # References FunctionalCompetency IDs
+  questionIds: [String] # References Question IDs
+  culturalValueIds: [String] # References CulturalValue IDs
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+# Role (organization-specific, derived from GlobalRole)
+type Role
+  @model
+  @auth(
+    rules: [
+      # Allow the owner (creator) to manage the role
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow users within the same tenant to read roles
+      { allow: owner, ownerField: "tenantId", identityClaim: "custom:tenantId", operations: [read] }
+      # Allow approver to approve the role
+      { allow: owner, ownerField: "approver", identityClaim: "username", operations: [update] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "rolesByTenantId")
+  name: String!
+  baseRoleId: ID # References GlobalRole
+  functionalCompetencyIds: [String] # References FunctionalCompetency IDs
+  culturalValueIds: [String] # References CulturalValue IDs
+  questionIds: [String] # References InterviewQuestion IDs
+  aiSuggestedQuestions: [String] # AI-suggested questions
+  status: String # e.g., "Pending", "Approved"
+  approver: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# Position
+type Position
+  @model
+  @auth(
+    rules: [
+      # Allow the owner (Hiring Manager) to manage the position
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow users within the same tenant to read positions
+      { allow: owner, ownerField: "tenantId", identityClaim: "custom:tenantId", operations: [read] }
+      # Allow approver to approve the position
+      { allow: owner, ownerField: "approver", identityClaim: "username", operations: [update] }
+      # Allow shared users (e.g., Interviewers) to read
+      { allow: owner, ownerField: "sharedWith", identityClaim: "username", operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "positionsByTenantId")
+  roleId: ID! # References Role
+  name: String!
+  positionStatus: String # e.g., "Pending", "Approved", "Open"
+  customCompetencyIds: [String] # References FunctionalCompetency IDs
+  customQuestionIds: [String] # References InterviewQuestion IDs
+  aiSuggestedQuestions: [String]
+  hiringManager: String
+  approver: String
+  status: String
+  sharedWith: [String]
+  notifications: AWSJSON # e.g., { "to": "OrgAdmin", "message": "Add role?" }
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# Candidate
+type Candidate
+  @model
+  @auth(
+    rules: [
+      # Allow the owner (Recruiter) to manage the candidate
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow users within the same tenant to read candidates
+      { allow: owner, ownerField: "tenantId", identityClaim: "custom:tenantId", operations: [read] }
+      # Allow shared users (e.g., Interviewers) to read
+      { allow: owner, ownerField: "sharedWith", identityClaim: "username", operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "candidatesByTenantId")
+  name: String!
+  email: String
+  phone: String
+  resume: String # S3 URL
+  linkedIn: String
+  aiFitSummary: AWSJSON # e.g., { "match": "85%", "details": "Strong in Planning" }
+  recruiter: String
+  sharedWith: [String]
+  notifications: AWSJSON # e.g., { "to": "HiringManager", "message": "Review low fit" }
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# InterviewProcess
+type InterviewProcess
+  @model
+  @auth(
+    rules: [
+      # Allow the owner (Hiring Manager) to manage the process
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow shared users (e.g., Facilitator, Interviewers) to read
+      { allow: owner, ownerField: "sharedWith", identityClaim: "username", operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "interviewProcessesByTenantId")
+  candidateId: ID! # References Candidate
+  positionId: ID! # References Position
+  facilitator: String
+  interviewers: [String]
+  steps: AWSJSON # e.g., { "step": "Panel", "interviewers": [{ "username": "Alice", "competencies": ["Budget Oversight"] }] }
+  sharedWith: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# Feedback
+type Feedback
+  @model
+  @auth(
+    rules: [
+      # Allow the owner (Interviewer) to manage their feedback
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow shared users (e.g., Facilitator, Hiring Manager) to read
+      { allow: owner, ownerField: "sharedWith", identityClaim: "username", operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "feedbackByTenantId")
+  interviewProcessId: ID! # References InterviewProcess
+  step: String
+  transcript: String
+  aiSummary: String
+  comments: String
+  ratings: AWSJSON # e.g., { "Customer Focus": "Exceeds" }
+  vote: String # e.g., "Hire", "No Hire"
+  visibilityStatus: String # e.g., "Pending", "Visible"
+  sharedWith: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# Debrief
+type Debrief
+  @model
+  @auth(
+    rules: [
+      # Allow the owner (Facilitator) to manage the debrief
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow shared users (e.g., Hiring Manager, Interviewers) to read
+      { allow: owner, ownerField: "sharedWith", identityClaim: "username", operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "debriefsByTenantId")
+  interviewProcessId: ID! # References InterviewProcess
+  summary: String
+  overallSummary: String # AI-generated (e.g., "Exceeds in problem-solving")
+  discussionPoints: AWSJSON # AI-generated discussion points
+  chatHistory: AWSJSON # Real-time AI chat history
+  consensus: AWSJSON # e.g., { "ratings": { "Budget Oversight": "Meets" }, "votes": { "Hire": 4 } }
+  decision: String # e.g., "Hire", "No Hire"
+  sharedWith: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# FunctionalCompetency
+type FunctionalCompetency
+  @model
+  @auth(
+    rules: [
+      # Allow the owner to manage the competency
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow users within the same tenant to read
+      { allow: owner, ownerField: "tenantId", identityClaim: "custom:tenantId", operations: [read] }
+      # Allow Application Administrators to manage
+      { allow: groups, groups: ["AppAdmins"], operations: [create, read, update, delete] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String @index(name: "byTenantId", queryField: "competenciesByTenantId")
+  name: String!
+  category: String
+  description: String
+  taggedTo: [String] # Tenants using this competency
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# CulturalValue
+type CulturalValue
+  @model
+  @auth(
+    rules: [
+      # Allow the owner to manage the value
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow users within the same tenant to read
+      { allow: owner, ownerField: "tenantId", identityClaim: "custom:tenantId", operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "valuesByTenantId")
+  name: String!
+  description: String
+  uniqueKey: String # e.g., tenantId#Name for duplicate detection
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# InterviewQuestion (organization-specific)
+type InterviewQuestion
+  @model
+  @auth(
+    rules: [
+      # Allow the owner to manage the question
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow users within the same tenant to read
+      { allow: owner, ownerField: "tenantId", identityClaim: "custom:tenantId", operations: [read] }
+      # Allow shared users (e.g., Interviewers) to read
+      { allow: owner, ownerField: "sharedWith", identityClaim: "username", operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "questionsByTenantId")
+  questionText: String!
+  category: String
+  source: String # e.g., "Custom", "Global"
+  baseQuestionId: ID # References Question
+  refinedFrom: String # Tracks source question for refinement
+  sharedWith: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# Question (global question bank)
+type Question
+  @model
+  @auth(
+    rules: [
+      # Allow Application Administrators to manage
+      { allow: groups, groups: ["AppAdmins"], operations: [create, read, update, delete] }
+      # Allow all users to read
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  text: String!
+  type: String # e.g., "Behavioral"
+  aiSuggested: String # AI-suggested refinement
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+# AssessmentActivity
+type AssessmentActivity
+  @model
+  @auth(
+    rules: [
+      # Allow the owner (Hiring Manager/Recruiter) to manage
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow shared users (e.g., Assessor) to read
+      { allow: owner, ownerField: "sharedWith", identityClaim: "username", operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String! @index(name: "byTenantId", queryField: "activitiesByTenantId")
+  interviewProcessId: ID! # References InterviewProcess
+  title: String!
+  description: String
+  artifactURL: String # S3 URL for uploaded artifact
+  aiSummary: String
+  sharedWith: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# Webinar
+type Webinar
+  @model
+  @auth(
+    rules: [
+      # Allow the owner to manage
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow users within the same tenant to read (org-specific)
+      { allow: owner, ownerField: "tenantId", identityClaim: "custom:tenantId", operations: [read] }
+      # Allow all users to read (system-wide)
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String @index(name: "byTenantId", queryField: "webinarsByTenantId")
+  title: String!
+  url: String!
+  schedule: AWSJSON # e.g., { "StartTime": "2025-05-15T14:00:00Z", "EndTime": "2025-05-15T15:00:00Z" }
+  status: String # e.g., "Upcoming", "Live", "Past"
+  password: String # For org-specific webinars
+  sharedWith: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
+
+# TrainingVideo
+type TrainingVideo
+  @model
+  @auth(
+    rules: [
+      # Allow the owner to manage
+      { allow: owner, identityClaim: "username", operations: [create, read, update, delete] }
+      # Allow users within the same tenant to read (org-specific)
+      { allow: owner, ownerField: "tenantId", identityClaim: "custom:tenantId", operations: [read] }
+      # Allow all users to read (system-wide)
+      { allow: public, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  tenantId: String @index(name: "byTenantId", queryField: "videosByTenantId")
+  title: String!
+  url: String!
+  course: AWSJSON # e.g., { "Name": "Behavioral Interviewing", "Modules": [{ "Title": "Module 1", "URL": "...", "Duration": "5 min" }] }
+  progress: AWSJSON # e.g., { "Module2": "100%" }
+  reviewed: Boolean
+  sharedWith: [String]
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  owner: String
+}
