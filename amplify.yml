@@ -1,0 +1,16 @@
+version: 1
+backend:
+  phases:
+    preBuild:
+      commands:
+        - nvm install 22
+        - nvm use 22
+        - npm install
+    build:
+      commands:
+        - echo "Node version: $(node --version)"
+        - echo "npm version: $(npm --version)"
+        - echo "ampx version: $(npx ampx --version)"
+        - echo "Directory contents: $(ls -la)"
+        - echo "Amplify directory contents: $(ls -la amplify)"
+        - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID
