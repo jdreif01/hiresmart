@@ -22,10 +22,14 @@ backend:
         - "echo 'Functions handler contents: $(cat amplify/functions/handler.ts || echo 'Failed to read functions/handler.ts')'"
         - "echo 'Permissions for .amplify directory: $(ls -ld .amplify)'"
         - "mkdir -p .amplify/artifacts/cdk.out"
+        - "chmod -R 755 .amplify"
         - "echo 'Permissions for .amplify/artifacts/cdk.out: $(ls -ld .amplify/artifacts/cdk.out)'"
         - "echo 'Environment variables: $(env)'"
         - "echo 'Checking for GOOGLE_CLIENT_ID: $(echo $GOOGLE_CLIENT_ID || echo 'Not set')'"
         - "echo 'Checking for GOOGLE_CLIENT_SECRET: $(echo $GOOGLE_CLIENT_SECRET || echo 'Not set')'"
+        - "echo 'Installed dependencies: $(npm list --depth=0)'"
+        - "echo 'Running dry-run synthesis to debug:'"
+        - "npx ampx sandbox --dry-run --debug || echo 'Dry-run synthesis failed'"
     build:
       commands:
         - "npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID --debug"
