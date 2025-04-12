@@ -1,0 +1,40 @@
+{
+  "Organization-4j6je7tgl5bd7iazxrelivygde-NONE": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "org1"},
+          "tenantId": {"S": "GTEG"},
+          "name": {"S": "GTEG"},
+          "ssoConfig": {"S": "{\"provider\": \"Google\", \"domain\": \"gteg.com\"}"},
+          "contactEmail": {"S": "admin@gteg.com"},
+          "owner": {"S": "jdreif@gmail.com"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "org2"},
+          "tenantId": {"S": "flatironsequity"},
+          "name": {"S": "Flatiron Equity"},
+          "ssoConfig": {"S": "{\"provider\": \"Google\", \"domain\": \"flatironsequity.com\"}"},
+          "contactEmail": {"S": "admin@flatironsequity.com"},
+          "owner": {"S": "john@flatironsequity.com"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "org3"},
+          "tenantId": {"S": "teresareif"},
+          "name": {"S": "Teresa Reif"},
+          "ssoConfig": {"S": "{\"provider\": \"Google\", \"domain\": \"teresareif.com\"}"},
+          "contactEmail": {"S": "admin@teresareif.com"},
+          "owner": {"S": "teresa@teresareif.com"}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+[
+  {
+    "tenantId": "tenant1",
+    "roleId": "Senior Software Engineer",
+    "name": "Senior Software Engineer - Backend",
+    "positionStatus": "Open",
+    "customCompetencyIds": ["comp7"],
+    "customQuestionIds": ["q7"],
+    "aiSuggestedQuestions": ["How do you optimize database queries?"],
+    "hiringManager": "manager1@techcorp.com",
+    "approver": "approver1@techcorp.com",
+    "status": "Active",
+    "notifications": "{\"email\": \"manager1@techcorp.com\", \"frequency\": \"weekly\"}",
+    "owner": "jdreif@gmail.com"
+  },
+  {
+    "tenantId": "tenant2",
+    "roleId": "Lead Product Manager",
+    "name": "Lead Product Manager - Mobile",
+    "positionStatus": "Closed",
+    "customCompetencyIds": ["comp8"],
+    "customQuestionIds": ["q8"],
+    "aiSuggestedQuestions": ["How do you handle user feedback for mobile apps?"],
+    "hiringManager": "manager2@healthinc.com",
+    "approver": "approver2@healthinc.com",
+    "status": "Filled",
+    "notifications": "{\"email\": \"manager2@healthinc.com\", \"frequency\": \"daily\"}",
+    "owner": "jdreif@gmail.com"
+  }
+]

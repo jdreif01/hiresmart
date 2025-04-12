@@ -1,0 +1,61 @@
+{
+  "Position-4j6je7tgl5bd7iazxrelivygde-NONE": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "position1"},
+          "tenantId": {"S": "GTEG"},
+          "roleId": {"S": "role1"},
+          "name": {"S": "Senior Software Engineer - Backend"},
+          "positionStatus": {"S": "Open"},
+          "customCompetencyIds": {"SS": ["comp7"]},
+          "customQuestionIds": {"SS": ["q7"]},
+          "aiSuggestedQuestions": {"SS": ["How do you optimize database queries?"]},
+          "hiringManager": {"S": "manager1@gteg.com"},
+          "approver": {"S": "approver1@gteg.com"},
+          "status": {"S": "Active"},
+          "notifications": {"S": "{\"email\": \"manager1@gteg.com\", \"frequency\": \"weekly\"}"},
+          "owner": {"S": "jdreif@gmail.com"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "position2"},
+          "tenantId": {"S": "flatironsequity"},
+          "roleId": {"S": "role2"},
+          "name": {"S": "Lead Product Manager - Mobile"},
+          "positionStatus": {"S": "Closed"},
+          "customCompetencyIds": {"SS": ["comp8"]},
+          "customQuestionIds": {"SS": ["q8"]},
+          "aiSuggestedQuestions": {"SS": ["How do you handle user feedback for mobile apps?"]},
+          "hiringManager": {"S": "manager2@flatironsequity.com"},
+          "approver": {"S": "approver2@flatironsequity.com"},
+          "status": {"S": "Filled"},
+          "notifications": {"S": "{\"email\": \"manager2@flatironsequity.com\", \"frequency\": \"daily\"}"},
+          "owner": {"S": "john@flatironsequity.com"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "position3"},
+          "tenantId": {"S": "teresareif"},
+          "roleId": {"S": "role3"},
+          "name": {"S": "Marketing Director - Digital"},
+          "positionStatus": {"S": "Open"},
+          "customCompetencyIds": {"SS": ["comp9"]},
+          "customQuestionIds": {"SS": ["q9"]},
+          "aiSuggestedQuestions": {"SS": ["How do you measure the success of a digital campaign?"]},
+          "hiringManager": {"S": "manager3@teresareif.com"},
+          "approver": {"S": "approver3@teresareif.com"},
+          "status": {"S": "Active"},
+          "notifications": {"S": "{\"email\": \"manager3@teresareif.com\", \"frequency\": \"weekly\"}"},
+          "owner": {"S": "teresa@teresareif.com"}
+        }
+      }
+    }
+  ]
+}

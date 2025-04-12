@@ -3,15 +3,15 @@ import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
 import { generateClient } from '@aws-amplify/api';
 import { withAuthenticator } from '@aws-amplify/ui-react';
 import { Flex, Heading, Table, TableCell, TableHead, TableBody, TableRow, Text } from '@aws-amplify/ui-react';
-import { itemsByTenantId } from '../graphql/queries';
+import { listOrganizationByTenantId } from '../graphql/queries';
 
 const client = generateClient();
 
 interface Organization {
   id: string;
-  Name: string;
-  SSOProvider: string;
-  TenantId: string;
+  name: string;
+  ssoConfig: string;
+  tenantId: string;
 }
 
 const OrganizationList: React.FC = () => {
@@ -58,24 +58,23 @@ const OrganizationList: React.FC = () => {
       try {
         console.log('Fetching organizations for tenantId:', tenantId);
         const response = await client.graphql({
-          query: itemsByTenantId,
+          query: listOrganizationByTenantId,
           variables: {
-            tenantId: tenantId,
-            sk: { beginsWith: 'Organization#' }
+            tenantId: tenantId
           },
           authMode: 'userPool'
         }) as any;
         console.log('GraphQL response:', response);
-        const items = response.data?.itemsByTenantId?.items || [];
+        const items = response.data?.listOrganizationByTenantId?.items || [];
         console.log('Fetched items:', items);
         if (items.length === 0) {
           setErrorMessage('No organizations found for this tenant.');
         } else {
           const orgs = items.map((item: any) => ({
-            id: item.id, // Use item.id directly (e.g., "Organization#gmail")
-            Name: item.data.Name,
-            SSOProvider: item.data.SSOProvider,
-            TenantId: item.tenantId // Use top-level tenantId instead of data.TenantId
+            id: item.id,
+            name: item.name,
+            ssoConfig: item.ssoConfig,
+            tenantId: item.tenantId
           }));
           setOrganizations(orgs);
           setErrorMessage('');
@@ -101,7 +100,15 @@ const OrganizationList: React.FC = () => {
             <TableCell>Tenant ID</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>{organizations.map(org => (<TableRow key={org.id}><TableCell>{org.Name}</TableCell><TableCell>{org.SSOProvider}</TableCell><TableCell>{org.TenantId}</TableCell></TableRow>))}</TableBody>
+        <TableBody>
+          {organizations.map(org => (
+            <TableRow key={org.id}>
+              <TableCell>{org.name}</TableCell>
+              <TableCell>{org.ssoConfig ? JSON.parse(org.ssoConfig).provider : 'N/A'}</TableCell>
+              <TableCell>{org.tenantId}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
       </Table>
     </Flex>
   );

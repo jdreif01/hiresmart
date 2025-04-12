@@ -2,192 +2,363 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-import * as APITypes from "../API";
+import * as APITypes from "./API";
 type GeneratedMutation<InputType, OutputType> = string & {
   __generatedMutationInput: InputType;
   __generatedMutationOutput: OutputType;
 };
 
-export const createHireSmartItem = /* GraphQL */ `mutation CreateHireSmartItem(
-  $input: CreateHireSmartItemInput!
-  $condition: ModelHireSmartItemConditionInput
+export const createCandidate = /* GraphQL */ `mutation CreateCandidate(
+  $condition: ModelCandidateConditionInput
+  $input: CreateCandidateInput!
 ) {
-  createHireSmartItem(input: $input, condition: $condition) {
-    pk
-    sk
-    tenantId
-    entityType
-    data {
-      Name
-      SSOProvider
-      TenantId
-      RoleStatus
-      CulturalValueStatus
-      CompetencyStatus
-      Category
-      PositionStatus
-      CandidateNumber
-      Status
-      ResumeURL
-      LinkedInURL
-      ActivityCategory
-      StartTime
-      RawData
-      AISummary
-      Vote
-      Feedback
-      FacilitatorId
-      HiringManagerId
-      InterviewCategory
-      ScreeningVote
-      AssessmentType
-      InterviewerRole
-      Text
-      Source
-      QuestionStatus
-      QuestionCreatedDate
-      QuestionLastUpdated
-      RoleType
-      CombinedAISummary
-      FinalDecision
-      EvidenceCategory
-      EvidenceText
-      URL
-      Duration
-      ExerciseResponse
-      Date
-      __typename
-    }
-    id
+  createCandidate(condition: $condition, input: $input) {
+    aiFitSummary
     createdAt
-    updatedAt
+    email
+    id
+    linkedIn
+    name
+    notifications
     owner
+    phone
+    recruiter
+    resume
+    sharedWith
+    tenantId
+    updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.CreateHireSmartItemMutationVariables,
-  APITypes.CreateHireSmartItemMutation
+  APITypes.CreateCandidateMutationVariables,
+  APITypes.CreateCandidateMutation
 >;
-export const updateHireSmartItem = /* GraphQL */ `mutation UpdateHireSmartItem(
-  $input: UpdateHireSmartItemInput!
-  $condition: ModelHireSmartItemConditionInput
+export const createGlobalRole = /* GraphQL */ `mutation CreateGlobalRole(
+  $condition: ModelGlobalRoleConditionInput
+  $input: CreateGlobalRoleInput!
 ) {
-  updateHireSmartItem(input: $input, condition: $condition) {
-    pk
-    sk
-    tenantId
-    entityType
-    data {
-      Name
-      SSOProvider
-      TenantId
-      RoleStatus
-      CulturalValueStatus
-      CompetencyStatus
-      Category
-      PositionStatus
-      CandidateNumber
-      Status
-      ResumeURL
-      LinkedInURL
-      ActivityCategory
-      StartTime
-      RawData
-      AISummary
-      Vote
-      Feedback
-      FacilitatorId
-      HiringManagerId
-      InterviewCategory
-      ScreeningVote
-      AssessmentType
-      InterviewerRole
-      Text
-      Source
-      QuestionStatus
-      QuestionCreatedDate
-      QuestionLastUpdated
-      RoleType
-      CombinedAISummary
-      FinalDecision
-      EvidenceCategory
-      EvidenceText
-      URL
-      Duration
-      ExerciseResponse
-      Date
-      __typename
-    }
-    id
+  createGlobalRole(condition: $condition, input: $input) {
     createdAt
+    culturalValueIds
+    functionalCompetencyIds
+    id
+    name
+    questionIds
     updatedAt
-    owner
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.UpdateHireSmartItemMutationVariables,
-  APITypes.UpdateHireSmartItemMutation
+  APITypes.CreateGlobalRoleMutationVariables,
+  APITypes.CreateGlobalRoleMutation
 >;
-export const deleteHireSmartItem = /* GraphQL */ `mutation DeleteHireSmartItem(
-  $input: DeleteHireSmartItemInput!
-  $condition: ModelHireSmartItemConditionInput
+export const createOrganization = /* GraphQL */ `mutation CreateOrganization(
+  $condition: ModelOrganizationConditionInput
+  $input: CreateOrganizationInput!
 ) {
-  deleteHireSmartItem(input: $input, condition: $condition) {
-    pk
-    sk
-    tenantId
-    entityType
-    data {
-      Name
-      SSOProvider
-      TenantId
-      RoleStatus
-      CulturalValueStatus
-      CompetencyStatus
-      Category
-      PositionStatus
-      CandidateNumber
-      Status
-      ResumeURL
-      LinkedInURL
-      ActivityCategory
-      StartTime
-      RawData
-      AISummary
-      Vote
-      Feedback
-      FacilitatorId
-      HiringManagerId
-      InterviewCategory
-      ScreeningVote
-      AssessmentType
-      InterviewerRole
-      Text
-      Source
-      QuestionStatus
-      QuestionCreatedDate
-      QuestionLastUpdated
-      RoleType
-      CombinedAISummary
-      FinalDecision
-      EvidenceCategory
-      EvidenceText
-      URL
-      Duration
-      ExerciseResponse
-      Date
-      __typename
-    }
-    id
+  createOrganization(condition: $condition, input: $input) {
+    contactEmail
     createdAt
-    updatedAt
+    id
+    name
     owner
+    ssoConfig
+    tenantId
+    updatedAt
     __typename
   }
 }
 ` as GeneratedMutation<
-  APITypes.DeleteHireSmartItemMutationVariables,
-  APITypes.DeleteHireSmartItemMutation
+  APITypes.CreateOrganizationMutationVariables,
+  APITypes.CreateOrganizationMutation
+>;
+export const createPosition = /* GraphQL */ `mutation CreatePosition(
+  $condition: ModelPositionConditionInput
+  $input: CreatePositionInput!
+) {
+  createPosition(condition: $condition, input: $input) {
+    aiSuggestedQuestions
+    approver
+    createdAt
+    customCompetencyIds
+    customQuestionIds
+    hiringManager
+    id
+    name
+    notifications
+    owner
+    positionStatus
+    roleId
+    sharedWith
+    status
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreatePositionMutationVariables,
+  APITypes.CreatePositionMutation
+>;
+export const createRole = /* GraphQL */ `mutation CreateRole(
+  $condition: ModelRoleConditionInput
+  $input: CreateRoleInput!
+) {
+  createRole(condition: $condition, input: $input) {
+    aiSuggestedQuestions
+    approver
+    baseRoleId
+    createdAt
+    culturalValueIds
+    functionalCompetencyIds
+    id
+    name
+    owner
+    questionIds
+    status
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateRoleMutationVariables,
+  APITypes.CreateRoleMutation
+>;
+export const deleteCandidate = /* GraphQL */ `mutation DeleteCandidate(
+  $condition: ModelCandidateConditionInput
+  $input: DeleteCandidateInput!
+) {
+  deleteCandidate(condition: $condition, input: $input) {
+    aiFitSummary
+    createdAt
+    email
+    id
+    linkedIn
+    name
+    notifications
+    owner
+    phone
+    recruiter
+    resume
+    sharedWith
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteCandidateMutationVariables,
+  APITypes.DeleteCandidateMutation
+>;
+export const deleteGlobalRole = /* GraphQL */ `mutation DeleteGlobalRole(
+  $condition: ModelGlobalRoleConditionInput
+  $input: DeleteGlobalRoleInput!
+) {
+  deleteGlobalRole(condition: $condition, input: $input) {
+    createdAt
+    culturalValueIds
+    functionalCompetencyIds
+    id
+    name
+    questionIds
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteGlobalRoleMutationVariables,
+  APITypes.DeleteGlobalRoleMutation
+>;
+export const deleteOrganization = /* GraphQL */ `mutation DeleteOrganization(
+  $condition: ModelOrganizationConditionInput
+  $input: DeleteOrganizationInput!
+) {
+  deleteOrganization(condition: $condition, input: $input) {
+    contactEmail
+    createdAt
+    id
+    name
+    owner
+    ssoConfig
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteOrganizationMutationVariables,
+  APITypes.DeleteOrganizationMutation
+>;
+export const deletePosition = /* GraphQL */ `mutation DeletePosition(
+  $condition: ModelPositionConditionInput
+  $input: DeletePositionInput!
+) {
+  deletePosition(condition: $condition, input: $input) {
+    aiSuggestedQuestions
+    approver
+    createdAt
+    customCompetencyIds
+    customQuestionIds
+    hiringManager
+    id
+    name
+    notifications
+    owner
+    positionStatus
+    roleId
+    sharedWith
+    status
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeletePositionMutationVariables,
+  APITypes.DeletePositionMutation
+>;
+export const deleteRole = /* GraphQL */ `mutation DeleteRole(
+  $condition: ModelRoleConditionInput
+  $input: DeleteRoleInput!
+) {
+  deleteRole(condition: $condition, input: $input) {
+    aiSuggestedQuestions
+    approver
+    baseRoleId
+    createdAt
+    culturalValueIds
+    functionalCompetencyIds
+    id
+    name
+    owner
+    questionIds
+    status
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteRoleMutationVariables,
+  APITypes.DeleteRoleMutation
+>;
+export const updateCandidate = /* GraphQL */ `mutation UpdateCandidate(
+  $condition: ModelCandidateConditionInput
+  $input: UpdateCandidateInput!
+) {
+  updateCandidate(condition: $condition, input: $input) {
+    aiFitSummary
+    createdAt
+    email
+    id
+    linkedIn
+    name
+    notifications
+    owner
+    phone
+    recruiter
+    resume
+    sharedWith
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateCandidateMutationVariables,
+  APITypes.UpdateCandidateMutation
+>;
+export const updateGlobalRole = /* GraphQL */ `mutation UpdateGlobalRole(
+  $condition: ModelGlobalRoleConditionInput
+  $input: UpdateGlobalRoleInput!
+) {
+  updateGlobalRole(condition: $condition, input: $input) {
+    createdAt
+    culturalValueIds
+    functionalCompetencyIds
+    id
+    name
+    questionIds
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateGlobalRoleMutationVariables,
+  APITypes.UpdateGlobalRoleMutation
+>;
+export const updateOrganization = /* GraphQL */ `mutation UpdateOrganization(
+  $condition: ModelOrganizationConditionInput
+  $input: UpdateOrganizationInput!
+) {
+  updateOrganization(condition: $condition, input: $input) {
+    contactEmail
+    createdAt
+    id
+    name
+    owner
+    ssoConfig
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateOrganizationMutationVariables,
+  APITypes.UpdateOrganizationMutation
+>;
+export const updatePosition = /* GraphQL */ `mutation UpdatePosition(
+  $condition: ModelPositionConditionInput
+  $input: UpdatePositionInput!
+) {
+  updatePosition(condition: $condition, input: $input) {
+    aiSuggestedQuestions
+    approver
+    createdAt
+    customCompetencyIds
+    customQuestionIds
+    hiringManager
+    id
+    name
+    notifications
+    owner
+    positionStatus
+    roleId
+    sharedWith
+    status
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdatePositionMutationVariables,
+  APITypes.UpdatePositionMutation
+>;
+export const updateRole = /* GraphQL */ `mutation UpdateRole(
+  $condition: ModelRoleConditionInput
+  $input: UpdateRoleInput!
+) {
+  updateRole(condition: $condition, input: $input) {
+    aiSuggestedQuestions
+    approver
+    baseRoleId
+    createdAt
+    culturalValueIds
+    functionalCompetencyIds
+    id
+    name
+    owner
+    questionIds
+    status
+    tenantId
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateRoleMutationVariables,
+  APITypes.UpdateRoleMutation
 >;

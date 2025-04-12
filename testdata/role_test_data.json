@@ -1,0 +1,26 @@
+[
+  {
+    "tenantId": "tenant1",
+    "name": "Senior Software Engineer",
+    "baseRoleId": "globalrole1",
+    "functionalCompetencyIds": ["comp1", "comp2", "comp5"],
+    "culturalValueIds": ["value1", "value2"],
+    "questionIds": ["q1", "q2", "q5"],
+    "aiSuggestedQuestions": ["What is your experience with cloud architecture?", "How do you handle tight deadlines?"],
+    "status": "Draft",
+    "approver": "approver1@techcorp.com",
+    "owner": "jdreif@gmail.com"
+  },
+  {
+    "tenantId": "tenant2",
+    "name": "Lead Product Manager",
+    "baseRoleId": "globalrole2",
+    "functionalCompetencyIds": ["comp3", "comp4", "comp6"],
+    "culturalValueIds": ["value3", "value4"],
+    "questionIds": ["q3", "q4", "q6"],
+    "aiSuggestedQuestions": ["How do you prioritize product features?", "Describe a time you managed a cross-functional team."],
+    "status": "Approved",
+    "approver": "approver2@healthinc.com",
+    "owner": "jdreif@gmail.com"
+  }
+]

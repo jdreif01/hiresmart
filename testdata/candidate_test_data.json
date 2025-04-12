@@ -1,0 +1,26 @@
+[
+  {
+    "tenantId": "tenant1",
+    "name": "Alice Smith",
+    "email": "alice.smith@email.com",
+    "phone": "555-123-4567",
+    "resume": "s3://resumes/alice_smith_resume.pdf",
+    "linkedIn": "https://linkedin.com/in/alicesmith",
+    "aiFitSummary": "{\"fitScore\": 0.85, \"summary\": \"Strong technical skills, good cultural fit.\"}",
+    "recruiter": "recruiter1@techcorp.com",
+    "notifications": "{\"email\": \"recruiter1@techcorp.com\", \"frequency\": \"weekly\"}",
+    "owner": "jdreif@gmail.com"
+  },
+  {
+    "tenantId": "tenant2",
+    "name": "Bob Johnson",
+    "email": "bob.johnson@email.com",
+    "phone": "555-987-6543",
+    "resume": "s3://resumes/bob_johnson_resume.pdf",
+    "linkedIn": "https://linkedin.com/in/bobjohnson",
+    "aiFitSummary": "{\"fitScore\": 0.92, \"summary\": \"Excellent leadership skills, aligns with company values.\"}",
+    "recruiter": "recruiter2@healthinc.com",
+    "notifications": "{\"email\": \"recruiter2@healthinc.com\", \"frequency\": \"daily\"}",
+    "owner": "jdreif@gmail.com"
+  }
+]

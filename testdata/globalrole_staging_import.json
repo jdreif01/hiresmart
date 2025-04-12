@@ -1,0 +1,26 @@
+{
+  "GlobalRole-4j6je7tgl5bd7iazxrelivygde-NONE": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "globalrole1"},
+          "name": {"S": "Software Engineer"},
+          "functionalCompetencyIds": {"SS": ["comp1", "comp2"]},
+          "questionIds": {"SS": ["q1", "q2"]},
+          "culturalValueIds": {"SS": ["value1", "value2"]}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "globalrole2"},
+          "name": {"S": "Product Manager"},
+          "functionalCompetencyIds": {"SS": ["comp3", "comp4"]},
+          "questionIds": {"SS": ["q3", "q4"]},
+          "culturalValueIds": {"SS": ["value3", "value4"]}
+        }
+      }
+    }
+  ]
+}

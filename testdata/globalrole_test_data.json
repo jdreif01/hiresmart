@@ -1,0 +1,16 @@
+[
+  {
+    "id": "globalrole1",
+    "name": "Software Engineer",
+    "functionalCompetencyIds": ["comp1", "comp2"],
+    "questionIds": ["q1", "q2"],
+    "culturalValueIds": ["value1", "value2"]
+  },
+  {
+    "id": "globalrole2",
+    "name": "Product Manager",
+    "functionalCompetencyIds": ["comp3", "comp4"],
+    "questionIds": ["q3", "q4"],
+    "culturalValueIds": ["value3", "value4"]
+  }
+]

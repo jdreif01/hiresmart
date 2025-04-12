@@ -1,0 +1,16 @@
+[
+  {
+    "tenantId": "tenant1",
+    "name": "TechCorp",
+    "ssoConfig": "{\"provider\": \"Google\", \"domain\": \"techcorp.com\"}",
+    "contactEmail": "admin@techcorp.com",
+    "owner": "jdreif@gmail.com"
+  },
+  {
+    "tenantId": "tenant2",
+    "name": "HealthInc",
+    "ssoConfig": "{\"provider\": \"Google\", \"domain\": \"healthinc.com\"}",
+    "contactEmail": "admin@healthinc.com",
+    "owner": "jdreif@gmail.com"
+  }
+]
