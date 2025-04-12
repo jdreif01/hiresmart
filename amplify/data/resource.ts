@@ -9,8 +9,11 @@ const schema = a.schema({
       contactEmail: a.string(),
       owner: a.string(),
     })
+    .secondaryIndexes((index) => [
+      index('tenantId')
+    ])
     .authorization((allow) => [
-      allow.owner(),
+      allow.owner(), // Revert to default owner authorization
       allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
       allow.groups(['AppAdmins']).to(['create', 'read', 'update', 'delete']),
     ]),
@@ -41,7 +44,7 @@ const schema = a.schema({
       owner: a.string(),
     })
     .authorization((allow) => [
-      allow.owner(),
+      allow.owner(), // Revert to default owner authorization
       allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
       allow.ownerDefinedIn('approver').to(['update']),
     ]),
@@ -62,7 +65,7 @@ const schema = a.schema({
       owner: a.string(),
     })
     .authorization((allow) => [
-      allow.owner(),
+      allow.owner(), // Revert to default owner authorization
       allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
       allow.ownerDefinedIn('approver').to(['update']),
       allow.ownerDefinedIn('sharedWith').to(['read']),
@@ -82,7 +85,7 @@ const schema = a.schema({
       owner: a.string(),
     })
     .authorization((allow) => [
-      allow.owner(),
+      allow.owner(), // Revert to default owner authorization
       allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
       allow.ownerDefinedIn('sharedWith').to(['read']),
     ]),

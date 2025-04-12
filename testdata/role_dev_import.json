@@ -1,0 +1,61 @@
+{
+  "Role-dbitjom5onf25no3k7zg6s4dma-NONE": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "role1"},
+          "tenantId": {"S": "GTEG"},
+          "name": {"S": "Senior Software Engineer"},
+          "baseRoleId": {"S": "globalrole1"},
+          "functionalCompetencyIds": {"SS": ["comp1", "comp2", "comp5"]},
+          "culturalValueIds": {"SS": ["value1", "value2"]},
+          "questionIds": {"SS": ["q1", "q2", "q5"]},
+          "aiSuggestedQuestions": {"SS": ["What is your experience with cloud architecture?", "How do you handle tight deadlines?"]},
+          "status": {"S": "Draft"},
+          "approver": {"S": "approver1@gteg.com"},
+          "owner": {"S": "google_106341676604736758608"},
+          "createdAt": {"S": "2025-04-11T12:00:00Z"},
+          "updatedAt": {"S": "2025-04-11T12:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "role2"},
+          "tenantId": {"S": "flatironsequity"},
+          "name": {"S": "Lead Product Manager"},
+          "baseRoleId": {"S": "globalrole2"},
+          "functionalCompetencyIds": {"SS": ["comp3", "comp4", "comp6"]},
+          "culturalValueIds": {"SS": ["value3", "value4"]},
+          "questionIds": {"SS": ["q3", "q4", "q6"]},
+          "aiSuggestedQuestions": {"SS": ["How do you prioritize product features?", "Describe a time you managed a cross-functional team."]},
+          "status": {"S": "Approved"},
+          "approver": {"S": "approver2@flatironsequity.com"},
+          "owner": {"S": "google_107571531995806505390"},
+          "createdAt": {"S": "2025-04-11T12:00:00Z"},
+          "updatedAt": {"S": "2025-04-11T12:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "role3"},
+          "tenantId": {"S": "teresareif"},
+          "name": {"S": "Marketing Director"},
+          "baseRoleId": {"S": "globalrole2"},
+          "functionalCompetencyIds": {"SS": ["comp3", "comp4", "comp7"]},
+          "culturalValueIds": {"SS": ["value3", "value4"]},
+          "questionIds": {"SS": ["q3", "q4", "q7"]},
+          "aiSuggestedQuestions": {"SS": ["How do you develop a marketing strategy?", "Describe a successful campaign you led."]},
+          "status": {"S": "Draft"},
+          "approver": {"S": "approver3@teresareif.com"},
+          "owner": {"S": "google_108648272568178074407"},
+          "createdAt": {"S": "2025-04-11T12:00:00Z"},
+          "updatedAt": {"S": "2025-04-11T12:00:00Z"}
+        }
+      }
+    }
+  ]
+}

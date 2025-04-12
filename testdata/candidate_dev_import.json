@@ -1,0 +1,61 @@
+{
+  "Candidate-dbitjom5onf25no3k7zg6s4dma-NONE": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "candidate1"},
+          "tenantId": {"S": "GTEG"},
+          "name": {"S": "Alice Smith"},
+          "email": {"S": "alice.smith@email.com"},
+          "phone": {"S": "555-123-4567"},
+          "resume": {"S": "s3://resumes/alice_smith_resume.pdf"},
+          "linkedIn": {"S": "https://linkedin.com/in/alicesmith"},
+          "aiFitSummary": {"S": "{\"fitScore\": 0.85, \"summary\": \"Strong technical skills, good cultural fit.\"}"},
+          "recruiter": {"S": "recruiter1@gteg.com"},
+          "notifications": {"S": "{\"email\": \"recruiter1@gteg.com\", \"frequency\": \"weekly\"}"},
+          "owner": {"S": "google_106341676604736758608"},
+          "createdAt": {"S": "2025-04-11T12:00:00Z"},
+          "updatedAt": {"S": "2025-04-11T12:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "candidate2"},
+          "tenantId": {"S": "flatironsequity"},
+          "name": {"S": "Bob Johnson"},
+          "email": {"S": "bob.johnson@email.com"},
+          "phone": {"S": "555-987-6543"},
+          "resume": {"S": "s3://resumes/bob_johnson_resume.pdf"},
+          "linkedIn": {"S": "https://linkedin.com/in/bobjohnson"},
+          "aiFitSummary": {"S": "{\"fitScore\": 0.92, \"summary\": \"Excellent leadership skills, aligns with company values.\"}"},
+          "recruiter": {"S": "recruiter2@flatironsequity.com"},
+          "notifications": {"S": "{\"email\": \"recruiter2@flatironsequity.com\", \"frequency\": \"daily\"}"},
+          "owner": {"S": "google_107571531995806505390"},
+          "createdAt": {"S": "2025-04-11T12:00:00Z"},
+          "updatedAt": {"S": "2025-04-11T12:00:00Z"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "candidate3"},
+          "tenantId": {"S": "teresareif"},
+          "name": {"S": "Carol Williams"},
+          "email": {"S": "carol.williams@email.com"},
+          "phone": {"S": "555-456-7890"},
+          "resume": {"S": "s3://resumes/carol_williams_resume.pdf"},
+          "linkedIn": {"S": "https://linkedin.com/in/carolwilliams"},
+          "aiFitSummary": {"S": "{\"fitScore\": 0.88, \"summary\": \"Proven marketing expertise, strong strategic thinker.\"}"},
+          "recruiter": {"S": "recruiter3@teresareif.com"},
+          "notifications": {"S": "{\"email\": \"recruiter3@teresareif.com\", \"frequency\": \"weekly\"}"},
+          "owner": {"S": "google_108648272568178074407"},
+          "createdAt": {"S": "2025-04-11T12:00:00Z"},
+          "updatedAt": {"S": "2025-04-11T12:00:00Z"}
+        }
+      }
+    }
+  ]
+}
