@@ -10,7 +10,7 @@ const NavBar: React.FC = () => {
   const handleSignOut = async () => {
     try {
       await signOut();
-      navigate('/organization-list');
+      navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -29,8 +29,8 @@ const NavBar: React.FC = () => {
         <Flex direction="row" alignItems="center" gap="20px">
           <Logo
             width="150px"
-            height="auto"
-            onClick={() => navigate('/organization-list')}
+            // Remove height="auto" and let SVG maintain aspect ratio
+            onClick={() => navigate('/')}
             style={{ cursor: 'pointer' }}
           />
           <Button
@@ -38,9 +38,9 @@ const NavBar: React.FC = () => {
             color="#000000"
             fontFamily="'Roboto', sans-serif"
             fontWeight="500"
-            onClick={() => navigate('/organization-list')}
+            onClick={() => navigate('/')}
           >
-            Organizations
+            Home
           </Button>
           <Button
             variation="link"

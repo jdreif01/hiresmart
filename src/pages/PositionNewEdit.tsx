@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import { generateClient } from '@aws-amplify/api';
 import { Flex, Heading, TextField, Button, SelectField, Text } from '@aws-amplify/ui-react';
 import { getPosition, listRoles, listPositions } from '../graphql/queries';
@@ -23,7 +24,7 @@ const PositionNewEdit: React.FC = () => {
     hiringManager: '',
     approver: '',
     status: 'Active',
-    notifications: JSON.stringify({ email: '', frequency: '' }), // Initialize as stringified JSON
+    notifications: JSON.stringify({ email: '', frequency: '' }),
   });
   const [roles, setRoles] = useState<any[]>([]);
 
@@ -96,7 +97,6 @@ const PositionNewEdit: React.FC = () => {
 
   const handleInputChange = (field: string, value: any) => {
     if (field === 'notifications') {
-      // Ensure notifications is always a stringified JSON
       setPosition((prev: any) => ({
         ...prev,
         [field]: JSON.stringify(value),
@@ -111,7 +111,6 @@ const PositionNewEdit: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      // Create a clean positionInput object with only the fields defined in CreatePositionInput/UpdatePositionInput
       const positionInput = {
         id: position.id,
         tenantId,
@@ -128,14 +127,12 @@ const PositionNewEdit: React.FC = () => {
       };
 
       if (id) {
-        // Update existing position
         await client.graphql({
           query: updatePosition,
           variables: { input: positionInput },
           authMode: 'userPool',
         });
       } else {
-        // Create new position
         delete positionInput.id;
         await client.graphql({
           query: createPosition,
@@ -209,4 +206,9 @@ const PositionNewEdit: React.FC = () => {
   );
 };
 
-export default PositionNewEdit;
+export default withAuthenticator(PositionNewEdit, {
+  socialProviders: ['google'],
+  loginMechanisms: [],
+  signUpAttributes: [],
+  hideSignUp: true
+});

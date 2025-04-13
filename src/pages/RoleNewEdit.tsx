@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
+import { withAuthenticator } from '@aws-amplify/ui-react';
 import { generateClient } from '@aws-amplify/api';
 import { Flex, Heading, TextField, Button, SelectField, Text } from '@aws-amplify/ui-react';
 import { getRole, listRoles } from '../graphql/queries';
@@ -80,7 +81,6 @@ const RoleNewEdit: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      // Create a clean roleInput object with only the fields defined in UpdateRoleInput
       const roleInput = {
         id: role.id,
         tenantId,
@@ -95,15 +95,13 @@ const RoleNewEdit: React.FC = () => {
       };
 
       if (id) {
-        // Update existing role
         await client.graphql({
           query: updateRole,
           variables: { input: roleInput },
           authMode: 'userPool',
         });
       } else {
-        // Create new role
-        delete roleInput.id; // Remove id for new role creation
+        delete roleInput.id;
         await client.graphql({
           query: createRole,
           variables: { input: roleInput },
@@ -156,4 +154,9 @@ const RoleNewEdit: React.FC = () => {
   );
 };
 
-export default RoleNewEdit;
+export default withAuthenticator(RoleNewEdit, {
+  socialProviders: ['google'],
+  loginMechanisms: [],
+  signUpAttributes: [],
+  hideSignUp: true
+});
