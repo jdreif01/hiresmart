@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
-import { withAuthenticator } from '@aws-amplify/ui-react';
 import { generateClient } from '@aws-amplify/api';
-import { Flex, Heading, TextField, Button, SelectField, Text } from '@aws-amplify/ui-react';
+import { Flex, Heading, TextField, Button, SelectField, Text, View, Icon } from '@aws-amplify/ui-react';
 import { getPosition, listRoles, listPositions } from '../graphql/queries';
 import { createPosition, updatePosition } from '../graphql/mutations';
+import { MdArrowBack } from 'react-icons/md';
 
 const client = generateClient();
 
@@ -23,7 +23,6 @@ const PositionNewEdit: React.FC = () => {
     positionStatus: 'Open',
     hiringManager: '',
     approver: '',
-    status: 'Active',
     notifications: JSON.stringify({ email: '', frequency: '' }),
   });
   const [roles, setRoles] = useState<any[]>([]);
@@ -122,7 +121,7 @@ const PositionNewEdit: React.FC = () => {
         aiSuggestedQuestions: position.aiSuggestedQuestions || [],
         hiringManager: position.hiringManager,
         approver: position.approver,
-        status: position.status,
+        status: 'Active',
         notifications: position.notifications || JSON.stringify({ email: '', frequency: '' }),
       };
 
@@ -152,63 +151,59 @@ const PositionNewEdit: React.FC = () => {
   }
 
   return (
-    <Flex direction="column" padding="20px">
-      <Heading level={1}>{id ? 'Edit Position' : 'New Position'}</Heading>
-      {errorMessage && <Text color="red">{errorMessage}</Text>}
-      <TextField
-        label="Position Name"
-        value={position.name}
-        onChange={(e) => handleInputChange('name', e.target.value)}
-      />
-      <SelectField
-        label="Role"
-        value={position.roleId}
-        onChange={(e) => handleInputChange('roleId', e.target.value)}
-      >
-        <option value="">Select a Role</option>
-        {roles.map((role) => (
-          <option key={role.id} value={role.id}>
-            {role.name}
-          </option>
-        ))}
-      </SelectField>
-      <SelectField
-        label="Position Status"
-        value={position.positionStatus}
-        onChange={(e) => handleInputChange('positionStatus', e.target.value)}
-      >
-        <option value="Open">Open</option>
-        <option value="Closed">Closed</option>
-        <option value="Filled">Filled</option>
-      </SelectField>
-      <TextField
-        label="Hiring Manager Email"
-        value={position.hiringManager}
-        onChange={(e) => handleInputChange('hiringManager', e.target.value)}
-      />
-      <TextField
-        label="Approver Email"
-        value={position.approver}
-        onChange={(e) => handleInputChange('approver', e.target.value)}
-      />
-      <SelectField
-        label="Status"
-        value={position.status}
-        onChange={(e) => handleInputChange('status', e.target.value)}
-      >
-        <option value="Active">Active</option>
-        <option value="Inactive">Inactive</option>
-      </SelectField>
-      <Button variation="primary" onClick={handleSave}>
-        Save Position
-      </Button>
-    </Flex>
+    <View padding="space.xl" backgroundColor="background.primary" paddingTop="space.xxxl">
+      <Flex direction="column" gap="space.medium" maxWidth="600px" margin="0 auto">
+        <Flex alignItems="center" gap="space.small">
+          <Button variation="link" onClick={() => navigate('/positions')} padding="0">
+            <Icon as={MdArrowBack} fontSize="1.5rem" color="brand.primary" />
+          </Button>
+          <Heading level={1}>{id ? 'Edit Position' : 'New Position'}</Heading>
+        </Flex>
+        {errorMessage && <Text color="red">{errorMessage}</Text>}
+        <Flex direction="column" gap="space.medium" padding="space.medium" backgroundColor="background.secondary">
+          <TextField
+            label="Position Name"
+            value={position.name}
+            onChange={(e) => handleInputChange('name', e.target.value)}
+          />
+          <SelectField
+            label="Role"
+            value={position.roleId}
+            onChange={(e) => handleInputChange('roleId', e.target.value)}
+          >
+            <option value="">Select a Role</option>
+            {roles.map((role) => (
+              <option key={role.id} value={role.id}>
+                {role.name}
+              </option>
+            ))}
+          </SelectField>
+          <SelectField
+            label="Position Status"
+            value={position.positionStatus}
+            onChange={(e) => handleInputChange('positionStatus', e.target.value)}
+          >
+            <option value="Open">Open</option>
+            <option value="Closed">Closed</option>
+            <option value="Filled">Filled</option>
+          </SelectField>
+          <TextField
+            label="Hiring Manager Email"
+            value={position.hiringManager}
+            onChange={(e) => handleInputChange('hiringManager', e.target.value)}
+          />
+          <TextField
+            label="Approver Email"
+            value={position.approver}
+            onChange={(e) => handleInputChange('approver', e.target.value)}
+          />
+          <Button variation="primary" alignSelf="flex-end" onClick={handleSave}>
+            Save Position
+          </Button>
+        </Flex>
+      </Flex>
+    </View>
   );
 };
 
-export default withAuthenticator(PositionNewEdit, {
-  socialProviders: ['google'],
-  loginMechanisms: [],
-  signUpAttributes: [],
-  hideSignUp: true
-});
+export default PositionNewEdit;

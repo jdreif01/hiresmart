@@ -9,11 +9,9 @@ const schema = a.schema({
       contactEmail: a.string(),
       owner: a.string(),
     })
-    .secondaryIndexes((index) => [
-      index('tenantId')
-    ])
+    .secondaryIndexes((index) => [index('tenantId')])
     .authorization((allow) => [
-      allow.owner(), // Revert to default owner authorization
+      allow.owner(),
       allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
       allow.groups(['AppAdmins']).to(['create', 'read', 'update', 'delete']),
     ]),
@@ -21,9 +19,32 @@ const schema = a.schema({
   GlobalRole: a
     .model({
       name: a.string().required(),
+      description: a.string(), // Added for role description
       functionalCompetencyIds: a.string().array(),
       questionIds: a.string().array(),
       culturalValueIds: a.string().array(),
+    })
+    .authorization((allow) => [
+      allow.groups(['AppAdmins']).to(['create', 'read', 'update', 'delete']),
+      allow.guest().to(['read']),
+    ]),
+
+  FunctionalCompetency: a
+    .model({
+      name: a.string().required(),
+      description: a.string(),
+      priority: a.enum(['Low', 'Medium', 'High']), // For competency priority
+    })
+    .authorization((allow) => [
+      allow.groups(['AppAdmins']).to(['create', 'read', 'update', 'delete']),
+      allow.guest().to(['read']),
+    ]),
+
+  Question: a
+    .model({
+      text: a.string().required(),
+      competencyId: a.id(), // Links to FunctionalCompetency
+      roleId: a.id(), // Links to GlobalRole
     })
     .authorization((allow) => [
       allow.groups(['AppAdmins']).to(['create', 'read', 'update', 'delete']),
@@ -44,7 +65,7 @@ const schema = a.schema({
       owner: a.string(),
     })
     .authorization((allow) => [
-      allow.owner(), // Revert to default owner authorization
+      allow.owner(),
       allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
       allow.ownerDefinedIn('approver').to(['update']),
     ]),
@@ -63,9 +84,10 @@ const schema = a.schema({
       status: a.string(),
       notifications: a.json(),
       owner: a.string(),
+      interviewProcessId: a.id(),
     })
     .authorization((allow) => [
-      allow.owner(), // Revert to default owner authorization
+      allow.owner(),
       allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
       allow.ownerDefinedIn('approver').to(['update']),
       allow.ownerDefinedIn('sharedWith').to(['read']),
@@ -85,7 +107,7 @@ const schema = a.schema({
       owner: a.string(),
     })
     .authorization((allow) => [
-      allow.owner(), // Revert to default owner authorization
+      allow.owner(),
       allow.ownerDefinedIn('tenantId').identityClaim('custom:tenantId').to(['read']),
       allow.ownerDefinedIn('sharedWith').to(['read']),
     ]),

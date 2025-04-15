@@ -20,10 +20,28 @@ export type Candidate = {
   updatedAt: string,
 };
 
+export type FunctionalCompetency = {
+  __typename: "FunctionalCompetency",
+  createdAt: string,
+  description?: string | null,
+  id: string,
+  name: string,
+  priority?: FunctionalCompetencyPriority | null,
+  updatedAt: string,
+};
+
+export enum FunctionalCompetencyPriority {
+  High = "High",
+  Low = "Low",
+  Medium = "Medium",
+}
+
+
 export type GlobalRole = {
   __typename: "GlobalRole",
   createdAt: string,
   culturalValueIds?: Array< string | null > | null,
+  description?: string | null,
   functionalCompetencyIds?: Array< string | null > | null,
   id: string,
   name: string,
@@ -52,6 +70,7 @@ export type Position = {
   customQuestionIds?: Array< string | null > | null,
   hiringManager?: string | null,
   id: string,
+  interviewProcessId?: string | null,
   name: string,
   notifications?: string | null,
   owner?: string | null,
@@ -60,6 +79,16 @@ export type Position = {
   sharedWith?: string | null,
   status?: string | null,
   tenantId: string,
+  updatedAt: string,
+};
+
+export type Question = {
+  __typename: "Question",
+  competencyId?: string | null,
+  createdAt: string,
+  id: string,
+  roleId?: string | null,
+  text: string,
   updatedAt: string,
 };
 
@@ -162,10 +191,34 @@ export type ModelCandidateConnection = {
   nextToken?: string | null,
 };
 
+export type ModelFunctionalCompetencyFilterInput = {
+  and?: Array< ModelFunctionalCompetencyFilterInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  not?: ModelFunctionalCompetencyFilterInput | null,
+  or?: Array< ModelFunctionalCompetencyFilterInput | null > | null,
+  priority?: ModelFunctionalCompetencyPriorityInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelFunctionalCompetencyPriorityInput = {
+  eq?: FunctionalCompetencyPriority | null,
+  ne?: FunctionalCompetencyPriority | null,
+};
+
+export type ModelFunctionalCompetencyConnection = {
+  __typename: "ModelFunctionalCompetencyConnection",
+  items:  Array<FunctionalCompetency | null >,
+  nextToken?: string | null,
+};
+
 export type ModelGlobalRoleFilterInput = {
   and?: Array< ModelGlobalRoleFilterInput | null > | null,
   createdAt?: ModelStringInput | null,
   culturalValueIds?: ModelStringInput | null,
+  description?: ModelStringInput | null,
   functionalCompetencyIds?: ModelStringInput | null,
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
@@ -216,6 +269,7 @@ export type ModelPositionFilterInput = {
   customQuestionIds?: ModelStringInput | null,
   hiringManager?: ModelStringInput | null,
   id?: ModelIDInput | null,
+  interviewProcessId?: ModelIDInput | null,
   name?: ModelStringInput | null,
   not?: ModelPositionFilterInput | null,
   notifications?: ModelStringInput | null,
@@ -232,6 +286,24 @@ export type ModelPositionFilterInput = {
 export type ModelPositionConnection = {
   __typename: "ModelPositionConnection",
   items:  Array<Position | null >,
+  nextToken?: string | null,
+};
+
+export type ModelQuestionFilterInput = {
+  and?: Array< ModelQuestionFilterInput | null > | null,
+  competencyId?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  id?: ModelIDInput | null,
+  not?: ModelQuestionFilterInput | null,
+  or?: Array< ModelQuestionFilterInput | null > | null,
+  roleId?: ModelIDInput | null,
+  text?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type ModelQuestionConnection = {
+  __typename: "ModelQuestionConnection",
+  items:  Array<Question | null >,
   nextToken?: string | null,
 };
 
@@ -293,10 +365,29 @@ export type CreateCandidateInput = {
   tenantId: string,
 };
 
+export type ModelFunctionalCompetencyConditionInput = {
+  and?: Array< ModelFunctionalCompetencyConditionInput | null > | null,
+  createdAt?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  name?: ModelStringInput | null,
+  not?: ModelFunctionalCompetencyConditionInput | null,
+  or?: Array< ModelFunctionalCompetencyConditionInput | null > | null,
+  priority?: ModelFunctionalCompetencyPriorityInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type CreateFunctionalCompetencyInput = {
+  description?: string | null,
+  id?: string | null,
+  name: string,
+  priority?: FunctionalCompetencyPriority | null,
+};
+
 export type ModelGlobalRoleConditionInput = {
   and?: Array< ModelGlobalRoleConditionInput | null > | null,
   createdAt?: ModelStringInput | null,
   culturalValueIds?: ModelStringInput | null,
+  description?: ModelStringInput | null,
   functionalCompetencyIds?: ModelStringInput | null,
   name?: ModelStringInput | null,
   not?: ModelGlobalRoleConditionInput | null,
@@ -307,6 +398,7 @@ export type ModelGlobalRoleConditionInput = {
 
 export type CreateGlobalRoleInput = {
   culturalValueIds?: Array< string | null > | null,
+  description?: string | null,
   functionalCompetencyIds?: Array< string | null > | null,
   id?: string | null,
   name: string,
@@ -343,6 +435,7 @@ export type ModelPositionConditionInput = {
   customCompetencyIds?: ModelStringInput | null,
   customQuestionIds?: ModelStringInput | null,
   hiringManager?: ModelStringInput | null,
+  interviewProcessId?: ModelIDInput | null,
   name?: ModelStringInput | null,
   not?: ModelPositionConditionInput | null,
   notifications?: ModelStringInput | null,
@@ -363,6 +456,7 @@ export type CreatePositionInput = {
   customQuestionIds?: Array< string | null > | null,
   hiringManager?: string | null,
   id?: string | null,
+  interviewProcessId?: string | null,
   name: string,
   notifications?: string | null,
   owner?: string | null,
@@ -370,6 +464,24 @@ export type CreatePositionInput = {
   roleId: string,
   status?: string | null,
   tenantId: string,
+};
+
+export type ModelQuestionConditionInput = {
+  and?: Array< ModelQuestionConditionInput | null > | null,
+  competencyId?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  not?: ModelQuestionConditionInput | null,
+  or?: Array< ModelQuestionConditionInput | null > | null,
+  roleId?: ModelIDInput | null,
+  text?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+};
+
+export type CreateQuestionInput = {
+  competencyId?: string | null,
+  id?: string | null,
+  roleId?: string | null,
+  text: string,
 };
 
 export type ModelRoleConditionInput = {
@@ -408,6 +520,10 @@ export type DeleteCandidateInput = {
   id: string,
 };
 
+export type DeleteFunctionalCompetencyInput = {
+  id: string,
+};
+
 export type DeleteGlobalRoleInput = {
   id: string,
 };
@@ -417,6 +533,10 @@ export type DeleteOrganizationInput = {
 };
 
 export type DeletePositionInput = {
+  id: string,
+};
+
+export type DeleteQuestionInput = {
   id: string,
 };
 
@@ -438,8 +558,16 @@ export type UpdateCandidateInput = {
   tenantId?: string | null,
 };
 
+export type UpdateFunctionalCompetencyInput = {
+  description?: string | null,
+  id: string,
+  name?: string | null,
+  priority?: FunctionalCompetencyPriority | null,
+};
+
 export type UpdateGlobalRoleInput = {
   culturalValueIds?: Array< string | null > | null,
+  description?: string | null,
   functionalCompetencyIds?: Array< string | null > | null,
   id: string,
   name?: string | null,
@@ -462,6 +590,7 @@ export type UpdatePositionInput = {
   customQuestionIds?: Array< string | null > | null,
   hiringManager?: string | null,
   id: string,
+  interviewProcessId?: string | null,
   name?: string | null,
   notifications?: string | null,
   owner?: string | null,
@@ -469,6 +598,13 @@ export type UpdatePositionInput = {
   roleId?: string | null,
   status?: string | null,
   tenantId?: string | null,
+};
+
+export type UpdateQuestionInput = {
+  competencyId?: string | null,
+  id: string,
+  roleId?: string | null,
+  text?: string | null,
 };
 
 export type UpdateRoleInput = {
@@ -534,10 +670,22 @@ export type ModelSubscriptionIDInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionFunctionalCompetencyFilterInput = {
+  and?: Array< ModelSubscriptionFunctionalCompetencyFilterInput | null > | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  or?: Array< ModelSubscriptionFunctionalCompetencyFilterInput | null > | null,
+  priority?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+};
+
 export type ModelSubscriptionGlobalRoleFilterInput = {
   and?: Array< ModelSubscriptionGlobalRoleFilterInput | null > | null,
   createdAt?: ModelSubscriptionStringInput | null,
   culturalValueIds?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
   functionalCompetencyIds?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
@@ -568,6 +716,7 @@ export type ModelSubscriptionPositionFilterInput = {
   customQuestionIds?: ModelSubscriptionStringInput | null,
   hiringManager?: ModelSubscriptionStringInput | null,
   id?: ModelSubscriptionIDInput | null,
+  interviewProcessId?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
   notifications?: ModelSubscriptionStringInput | null,
   or?: Array< ModelSubscriptionPositionFilterInput | null > | null,
@@ -577,6 +726,17 @@ export type ModelSubscriptionPositionFilterInput = {
   sharedWith?: ModelStringInput | null,
   status?: ModelSubscriptionStringInput | null,
   tenantId?: ModelStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
+};
+
+export type ModelSubscriptionQuestionFilterInput = {
+  and?: Array< ModelSubscriptionQuestionFilterInput | null > | null,
+  competencyId?: ModelSubscriptionIDInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  or?: Array< ModelSubscriptionQuestionFilterInput | null > | null,
+  roleId?: ModelSubscriptionIDInput | null,
+  text?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
 };
 
@@ -622,6 +782,22 @@ export type GetCandidateQuery = {
   } | null,
 };
 
+export type GetFunctionalCompetencyQueryVariables = {
+  id: string,
+};
+
+export type GetFunctionalCompetencyQuery = {
+  getFunctionalCompetency?:  {
+    __typename: "FunctionalCompetency",
+    createdAt: string,
+    description?: string | null,
+    id: string,
+    name: string,
+    priority?: FunctionalCompetencyPriority | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type GetGlobalRoleQueryVariables = {
   id: string,
 };
@@ -631,6 +807,7 @@ export type GetGlobalRoleQuery = {
     __typename: "GlobalRole",
     createdAt: string,
     culturalValueIds?: Array< string | null > | null,
+    description?: string | null,
     functionalCompetencyIds?: Array< string | null > | null,
     id: string,
     name: string,
@@ -671,6 +848,7 @@ export type GetPositionQuery = {
     customQuestionIds?: Array< string | null > | null,
     hiringManager?: string | null,
     id: string,
+    interviewProcessId?: string | null,
     name: string,
     notifications?: string | null,
     owner?: string | null,
@@ -679,6 +857,22 @@ export type GetPositionQuery = {
     sharedWith?: string | null,
     status?: string | null,
     tenantId: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type GetQuestionQueryVariables = {
+  id: string,
+};
+
+export type GetQuestionQuery = {
+  getQuestion?:  {
+    __typename: "Question",
+    competencyId?: string | null,
+    createdAt: string,
+    id: string,
+    roleId?: string | null,
+    text: string,
     updatedAt: string,
   } | null,
 };
@@ -736,6 +930,28 @@ export type ListCandidatesQuery = {
   } | null,
 };
 
+export type ListFunctionalCompetenciesQueryVariables = {
+  filter?: ModelFunctionalCompetencyFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListFunctionalCompetenciesQuery = {
+  listFunctionalCompetencies?:  {
+    __typename: "ModelFunctionalCompetencyConnection",
+    items:  Array< {
+      __typename: "FunctionalCompetency",
+      createdAt: string,
+      description?: string | null,
+      id: string,
+      name: string,
+      priority?: FunctionalCompetencyPriority | null,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
 export type ListGlobalRolesQueryVariables = {
   filter?: ModelGlobalRoleFilterInput | null,
   limit?: number | null,
@@ -749,6 +965,7 @@ export type ListGlobalRolesQuery = {
       __typename: "GlobalRole",
       createdAt: string,
       culturalValueIds?: Array< string | null > | null,
+      description?: string | null,
       functionalCompetencyIds?: Array< string | null > | null,
       id: string,
       name: string,
@@ -827,6 +1044,7 @@ export type ListPositionsQuery = {
       customQuestionIds?: Array< string | null > | null,
       hiringManager?: string | null,
       id: string,
+      interviewProcessId?: string | null,
       name: string,
       notifications?: string | null,
       owner?: string | null,
@@ -835,6 +1053,28 @@ export type ListPositionsQuery = {
       sharedWith?: string | null,
       status?: string | null,
       tenantId: string,
+      updatedAt: string,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type ListQuestionsQueryVariables = {
+  filter?: ModelQuestionFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListQuestionsQuery = {
+  listQuestions?:  {
+    __typename: "ModelQuestionConnection",
+    items:  Array< {
+      __typename: "Question",
+      competencyId?: string | null,
+      createdAt: string,
+      id: string,
+      roleId?: string | null,
+      text: string,
       updatedAt: string,
     } | null >,
     nextToken?: string | null,
@@ -895,6 +1135,23 @@ export type CreateCandidateMutation = {
   } | null,
 };
 
+export type CreateFunctionalCompetencyMutationVariables = {
+  condition?: ModelFunctionalCompetencyConditionInput | null,
+  input: CreateFunctionalCompetencyInput,
+};
+
+export type CreateFunctionalCompetencyMutation = {
+  createFunctionalCompetency?:  {
+    __typename: "FunctionalCompetency",
+    createdAt: string,
+    description?: string | null,
+    id: string,
+    name: string,
+    priority?: FunctionalCompetencyPriority | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type CreateGlobalRoleMutationVariables = {
   condition?: ModelGlobalRoleConditionInput | null,
   input: CreateGlobalRoleInput,
@@ -905,6 +1162,7 @@ export type CreateGlobalRoleMutation = {
     __typename: "GlobalRole",
     createdAt: string,
     culturalValueIds?: Array< string | null > | null,
+    description?: string | null,
     functionalCompetencyIds?: Array< string | null > | null,
     id: string,
     name: string,
@@ -947,6 +1205,7 @@ export type CreatePositionMutation = {
     customQuestionIds?: Array< string | null > | null,
     hiringManager?: string | null,
     id: string,
+    interviewProcessId?: string | null,
     name: string,
     notifications?: string | null,
     owner?: string | null,
@@ -955,6 +1214,23 @@ export type CreatePositionMutation = {
     sharedWith?: string | null,
     status?: string | null,
     tenantId: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type CreateQuestionMutationVariables = {
+  condition?: ModelQuestionConditionInput | null,
+  input: CreateQuestionInput,
+};
+
+export type CreateQuestionMutation = {
+  createQuestion?:  {
+    __typename: "Question",
+    competencyId?: string | null,
+    createdAt: string,
+    id: string,
+    roleId?: string | null,
+    text: string,
     updatedAt: string,
   } | null,
 };
@@ -1008,6 +1284,23 @@ export type DeleteCandidateMutation = {
   } | null,
 };
 
+export type DeleteFunctionalCompetencyMutationVariables = {
+  condition?: ModelFunctionalCompetencyConditionInput | null,
+  input: DeleteFunctionalCompetencyInput,
+};
+
+export type DeleteFunctionalCompetencyMutation = {
+  deleteFunctionalCompetency?:  {
+    __typename: "FunctionalCompetency",
+    createdAt: string,
+    description?: string | null,
+    id: string,
+    name: string,
+    priority?: FunctionalCompetencyPriority | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type DeleteGlobalRoleMutationVariables = {
   condition?: ModelGlobalRoleConditionInput | null,
   input: DeleteGlobalRoleInput,
@@ -1018,6 +1311,7 @@ export type DeleteGlobalRoleMutation = {
     __typename: "GlobalRole",
     createdAt: string,
     culturalValueIds?: Array< string | null > | null,
+    description?: string | null,
     functionalCompetencyIds?: Array< string | null > | null,
     id: string,
     name: string,
@@ -1060,6 +1354,7 @@ export type DeletePositionMutation = {
     customQuestionIds?: Array< string | null > | null,
     hiringManager?: string | null,
     id: string,
+    interviewProcessId?: string | null,
     name: string,
     notifications?: string | null,
     owner?: string | null,
@@ -1068,6 +1363,23 @@ export type DeletePositionMutation = {
     sharedWith?: string | null,
     status?: string | null,
     tenantId: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type DeleteQuestionMutationVariables = {
+  condition?: ModelQuestionConditionInput | null,
+  input: DeleteQuestionInput,
+};
+
+export type DeleteQuestionMutation = {
+  deleteQuestion?:  {
+    __typename: "Question",
+    competencyId?: string | null,
+    createdAt: string,
+    id: string,
+    roleId?: string | null,
+    text: string,
     updatedAt: string,
   } | null,
 };
@@ -1121,6 +1433,23 @@ export type UpdateCandidateMutation = {
   } | null,
 };
 
+export type UpdateFunctionalCompetencyMutationVariables = {
+  condition?: ModelFunctionalCompetencyConditionInput | null,
+  input: UpdateFunctionalCompetencyInput,
+};
+
+export type UpdateFunctionalCompetencyMutation = {
+  updateFunctionalCompetency?:  {
+    __typename: "FunctionalCompetency",
+    createdAt: string,
+    description?: string | null,
+    id: string,
+    name: string,
+    priority?: FunctionalCompetencyPriority | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type UpdateGlobalRoleMutationVariables = {
   condition?: ModelGlobalRoleConditionInput | null,
   input: UpdateGlobalRoleInput,
@@ -1131,6 +1460,7 @@ export type UpdateGlobalRoleMutation = {
     __typename: "GlobalRole",
     createdAt: string,
     culturalValueIds?: Array< string | null > | null,
+    description?: string | null,
     functionalCompetencyIds?: Array< string | null > | null,
     id: string,
     name: string,
@@ -1173,6 +1503,7 @@ export type UpdatePositionMutation = {
     customQuestionIds?: Array< string | null > | null,
     hiringManager?: string | null,
     id: string,
+    interviewProcessId?: string | null,
     name: string,
     notifications?: string | null,
     owner?: string | null,
@@ -1181,6 +1512,23 @@ export type UpdatePositionMutation = {
     sharedWith?: string | null,
     status?: string | null,
     tenantId: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type UpdateQuestionMutationVariables = {
+  condition?: ModelQuestionConditionInput | null,
+  input: UpdateQuestionInput,
+};
+
+export type UpdateQuestionMutation = {
+  updateQuestion?:  {
+    __typename: "Question",
+    competencyId?: string | null,
+    createdAt: string,
+    id: string,
+    roleId?: string | null,
+    text: string,
     updatedAt: string,
   } | null,
 };
@@ -1236,6 +1584,22 @@ export type OnCreateCandidateSubscription = {
   } | null,
 };
 
+export type OnCreateFunctionalCompetencySubscriptionVariables = {
+  filter?: ModelSubscriptionFunctionalCompetencyFilterInput | null,
+};
+
+export type OnCreateFunctionalCompetencySubscription = {
+  onCreateFunctionalCompetency?:  {
+    __typename: "FunctionalCompetency",
+    createdAt: string,
+    description?: string | null,
+    id: string,
+    name: string,
+    priority?: FunctionalCompetencyPriority | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnCreateGlobalRoleSubscriptionVariables = {
   filter?: ModelSubscriptionGlobalRoleFilterInput | null,
 };
@@ -1245,6 +1609,7 @@ export type OnCreateGlobalRoleSubscription = {
     __typename: "GlobalRole",
     createdAt: string,
     culturalValueIds?: Array< string | null > | null,
+    description?: string | null,
     functionalCompetencyIds?: Array< string | null > | null,
     id: string,
     name: string,
@@ -1290,6 +1655,7 @@ export type OnCreatePositionSubscription = {
     customQuestionIds?: Array< string | null > | null,
     hiringManager?: string | null,
     id: string,
+    interviewProcessId?: string | null,
     name: string,
     notifications?: string | null,
     owner?: string | null,
@@ -1298,6 +1664,22 @@ export type OnCreatePositionSubscription = {
     sharedWith?: string | null,
     status?: string | null,
     tenantId: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnCreateQuestionSubscriptionVariables = {
+  filter?: ModelSubscriptionQuestionFilterInput | null,
+};
+
+export type OnCreateQuestionSubscription = {
+  onCreateQuestion?:  {
+    __typename: "Question",
+    competencyId?: string | null,
+    createdAt: string,
+    id: string,
+    roleId?: string | null,
+    text: string,
     updatedAt: string,
   } | null,
 };
@@ -1354,6 +1736,22 @@ export type OnDeleteCandidateSubscription = {
   } | null,
 };
 
+export type OnDeleteFunctionalCompetencySubscriptionVariables = {
+  filter?: ModelSubscriptionFunctionalCompetencyFilterInput | null,
+};
+
+export type OnDeleteFunctionalCompetencySubscription = {
+  onDeleteFunctionalCompetency?:  {
+    __typename: "FunctionalCompetency",
+    createdAt: string,
+    description?: string | null,
+    id: string,
+    name: string,
+    priority?: FunctionalCompetencyPriority | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnDeleteGlobalRoleSubscriptionVariables = {
   filter?: ModelSubscriptionGlobalRoleFilterInput | null,
 };
@@ -1363,6 +1761,7 @@ export type OnDeleteGlobalRoleSubscription = {
     __typename: "GlobalRole",
     createdAt: string,
     culturalValueIds?: Array< string | null > | null,
+    description?: string | null,
     functionalCompetencyIds?: Array< string | null > | null,
     id: string,
     name: string,
@@ -1408,6 +1807,7 @@ export type OnDeletePositionSubscription = {
     customQuestionIds?: Array< string | null > | null,
     hiringManager?: string | null,
     id: string,
+    interviewProcessId?: string | null,
     name: string,
     notifications?: string | null,
     owner?: string | null,
@@ -1416,6 +1816,22 @@ export type OnDeletePositionSubscription = {
     sharedWith?: string | null,
     status?: string | null,
     tenantId: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnDeleteQuestionSubscriptionVariables = {
+  filter?: ModelSubscriptionQuestionFilterInput | null,
+};
+
+export type OnDeleteQuestionSubscription = {
+  onDeleteQuestion?:  {
+    __typename: "Question",
+    competencyId?: string | null,
+    createdAt: string,
+    id: string,
+    roleId?: string | null,
+    text: string,
     updatedAt: string,
   } | null,
 };
@@ -1472,6 +1888,22 @@ export type OnUpdateCandidateSubscription = {
   } | null,
 };
 
+export type OnUpdateFunctionalCompetencySubscriptionVariables = {
+  filter?: ModelSubscriptionFunctionalCompetencyFilterInput | null,
+};
+
+export type OnUpdateFunctionalCompetencySubscription = {
+  onUpdateFunctionalCompetency?:  {
+    __typename: "FunctionalCompetency",
+    createdAt: string,
+    description?: string | null,
+    id: string,
+    name: string,
+    priority?: FunctionalCompetencyPriority | null,
+    updatedAt: string,
+  } | null,
+};
+
 export type OnUpdateGlobalRoleSubscriptionVariables = {
   filter?: ModelSubscriptionGlobalRoleFilterInput | null,
 };
@@ -1481,6 +1913,7 @@ export type OnUpdateGlobalRoleSubscription = {
     __typename: "GlobalRole",
     createdAt: string,
     culturalValueIds?: Array< string | null > | null,
+    description?: string | null,
     functionalCompetencyIds?: Array< string | null > | null,
     id: string,
     name: string,
@@ -1526,6 +1959,7 @@ export type OnUpdatePositionSubscription = {
     customQuestionIds?: Array< string | null > | null,
     hiringManager?: string | null,
     id: string,
+    interviewProcessId?: string | null,
     name: string,
     notifications?: string | null,
     owner?: string | null,
@@ -1534,6 +1968,22 @@ export type OnUpdatePositionSubscription = {
     sharedWith?: string | null,
     status?: string | null,
     tenantId: string,
+    updatedAt: string,
+  } | null,
+};
+
+export type OnUpdateQuestionSubscriptionVariables = {
+  filter?: ModelSubscriptionQuestionFilterInput | null,
+};
+
+export type OnUpdateQuestionSubscription = {
+  onUpdateQuestion?:  {
+    __typename: "Question",
+    competencyId?: string | null,
+    createdAt: string,
+    id: string,
+    roleId?: string | null,
+    text: string,
     updatedAt: string,
   } | null,
 };

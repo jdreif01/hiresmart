@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
-import { withAuthenticator } from '@aws-amplify/ui-react';
 import { generateClient } from '@aws-amplify/api';
-import { Flex, Heading, Table, TableCell, TableHead, TableBody, TableRow, Text, Button } from '@aws-amplify/ui-react';
+import { Flex, Heading, Card, Text, Button, View } from '@aws-amplify/ui-react';
 import { listPositions } from '../graphql/queries';
 
 const client = generateClient();
@@ -76,47 +75,49 @@ const PositionsList: React.FC = () => {
   }
 
   return (
-    <Flex direction="column" padding="20px">
-      <Heading level={1}>Positions</Heading>
-      <Button variation="primary" onClick={() => navigate('/position/new')}>
-        Create New Position
-      </Button>
-      {errorMessage && <Text color="red">{errorMessage}</Text>}
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Role ID</TableCell>
-            <TableCell>Position Status</TableCell>
-            <TableCell>Hiring Manager</TableCell>
-            <TableCell>Approver</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {positions.map((position) => (
-            <TableRow key={position.id}>
-              <TableCell>{position.name}</TableCell>
-              <TableCell>{position.roleId}</TableCell>
-              <TableCell>{position.positionStatus}</TableCell>
-              <TableCell>{position.hiringManager}</TableCell>
-              <TableCell>{position.approver}</TableCell>
-              <TableCell>
-                <Button onClick={() => navigate(`/position/${position.id}`)}>
-                  Edit
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Flex>
+    <View padding="space.xl" backgroundColor="background.primary" paddingTop="space.xxxl">
+      <Flex direction="column" gap="space.medium" maxWidth="1000px" margin="0 auto">
+        <Flex justifyContent="space-between" alignItems="center">
+          <Heading level={1}>Positions</Heading>
+          <Button variation="primary" onClick={() => navigate('/position/new')}>
+            Create New Position
+          </Button>
+        </Flex>
+        {errorMessage && <Text color="red">{errorMessage}</Text>}
+        {positions.length === 0 && !errorMessage ? (
+          <Text fontSize="large" textAlign="center">
+            No positions found. Create a new position to get started.
+          </Text>
+        ) : (
+          <Flex direction="column" gap="space.medium">
+            {positions.map((position) => (
+              <Card key={position.id} variation="elevated">
+                <Flex direction="row" alignItems="center" justifyContent="space-between">
+                  <Flex direction="column" gap="space.xs">
+                    <Text fontSize="large" fontWeight="500">
+                      {position.name}
+                    </Text>
+                    <Text fontSize="medium" color="font.secondary">
+                      Position Status: {position.positionStatus}
+                    </Text>
+                    <Text fontSize="medium" color="font.secondary">
+                      Hiring Manager: {position.hiringManager}
+                    </Text>
+                    <Text fontSize="medium" color="font.secondary">
+                      Approver: {position.approver}
+                    </Text>
+                  </Flex>
+                  <Button variation="primary" onClick={() => navigate(`/position/${position.id}`)}>
+                    Edit
+                  </Button>
+                </Flex>
+              </Card>
+            ))}
+          </Flex>
+        )}
+      </Flex>
+    </View>
   );
 };
 
-export default withAuthenticator(PositionsList, {
-  socialProviders: ['google'],
-  loginMechanisms: [],
-  signUpAttributes: [],
-  hideSignUp: true
-});
+export default PositionsList;

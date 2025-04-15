@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
-import { withAuthenticator } from '@aws-amplify/ui-react';
 import { generateClient } from '@aws-amplify/api';
-import { Flex, Heading, Table, TableCell, TableHead, TableBody, TableRow, Text, Button } from '@aws-amplify/ui-react';
+import { Flex, Heading, Card, Text, Button, View } from '@aws-amplify/ui-react';
 import { listRoles } from '../graphql/queries';
 
 const client = generateClient();
@@ -76,43 +75,46 @@ const RolesList: React.FC = () => {
   }
 
   return (
-    <Flex direction="column" padding="20px">
-      <Heading level={1}>Roles</Heading>
-      <Button variation="primary" onClick={() => navigate('/role/new')}>
-        Create New Role
-      </Button>
-      {errorMessage && <Text color="red">{errorMessage}</Text>}
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Approver</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {roles.map((role) => (
-            <TableRow key={role.id}>
-              <TableCell>{role.name}</TableCell>
-              <TableCell>{role.status}</TableCell>
-              <TableCell>{role.approver}</TableCell>
-              <TableCell>
-                <Button onClick={() => navigate(`/role/${role.id}`)}>
-                  Edit
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Flex>
+    <View padding="space.xl" backgroundColor="background.primary" paddingTop="space.xxxl">
+      <Flex direction="column" gap="space.medium" maxWidth="1000px" margin="0 auto">
+        <Flex justifyContent="space-between" alignItems="center">
+          <Heading level={1}>Roles</Heading>
+          <Button variation="primary" onClick={() => navigate('/role/new')}>
+            Create New Role
+          </Button>
+        </Flex>
+        {errorMessage && <Text color="red">{errorMessage}</Text>}
+        {roles.length === 0 && !errorMessage ? (
+          <Text fontSize="large" textAlign="center">
+            No roles found. Create a new role to get started.
+          </Text>
+        ) : (
+          <Flex direction="column" gap="space.medium">
+            {roles.map((role) => (
+              <Card key={role.id} variation="elevated">
+                <Flex direction="row" alignItems="center" justifyContent="space-between">
+                  <Flex direction="column" gap="space.xs">
+                    <Text fontSize="large" fontWeight="500">
+                      {role.name}
+                    </Text>
+                    <Text fontSize="medium" color="font.secondary">
+                      Status: {role.status}
+                    </Text>
+                    <Text fontSize="medium" color="font.secondary">
+                      Approver: {role.approver}
+                    </Text>
+                  </Flex>
+                  <Button variation="primary" onClick={() => navigate(`/role/${role.id}`)}>
+                    Edit
+                  </Button>
+                </Flex>
+              </Card>
+            ))}
+          </Flex>
+        )}
+      </Flex>
+    </View>
   );
 };
 
-export default withAuthenticator(RolesList, {
-  socialProviders: ['google'],
-  loginMechanisms: [],
-  signUpAttributes: [],
-  hideSignUp: true
-});
+export default RolesList;

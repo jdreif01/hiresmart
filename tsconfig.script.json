@@ -15,15 +15,7 @@
     ]
   },
   "include": [
-    "amplify/**/*.ts",
-    "src/**/*.ts",
-    "scripts/**/*.ts",
-    "amplify/data/schema.graphql",
-    "src/types/**/*.d.ts"
+    "scripts/load-test-data.ts"
   ],
-  "exclude": ["node_modules", "dist"],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
-  }
+  "exclude": ["node_modules", "dist"]
 }

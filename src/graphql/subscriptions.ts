@@ -41,12 +41,30 @@ export const onCreateCandidate = /* GraphQL */ `subscription OnCreateCandidate(
   APITypes.OnCreateCandidateSubscriptionVariables,
   APITypes.OnCreateCandidateSubscription
 >;
+export const onCreateFunctionalCompetency = /* GraphQL */ `subscription OnCreateFunctionalCompetency(
+  $filter: ModelSubscriptionFunctionalCompetencyFilterInput
+) {
+  onCreateFunctionalCompetency(filter: $filter) {
+    createdAt
+    description
+    id
+    name
+    priority
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateFunctionalCompetencySubscriptionVariables,
+  APITypes.OnCreateFunctionalCompetencySubscription
+>;
 export const onCreateGlobalRole = /* GraphQL */ `subscription OnCreateGlobalRole(
   $filter: ModelSubscriptionGlobalRoleFilterInput
 ) {
   onCreateGlobalRole(filter: $filter) {
     createdAt
     culturalValueIds
+    description
     functionalCompetencyIds
     id
     name
@@ -99,6 +117,7 @@ export const onCreatePosition = /* GraphQL */ `subscription OnCreatePosition(
     customQuestionIds
     hiringManager
     id
+    interviewProcessId
     name
     notifications
     owner
@@ -114,6 +133,21 @@ export const onCreatePosition = /* GraphQL */ `subscription OnCreatePosition(
 ` as GeneratedSubscription<
   APITypes.OnCreatePositionSubscriptionVariables,
   APITypes.OnCreatePositionSubscription
+>;
+export const onCreateQuestion = /* GraphQL */ `subscription OnCreateQuestion($filter: ModelSubscriptionQuestionFilterInput) {
+  onCreateQuestion(filter: $filter) {
+    competencyId
+    createdAt
+    id
+    roleId
+    text
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateQuestionSubscriptionVariables,
+  APITypes.OnCreateQuestionSubscription
 >;
 export const onCreateRole = /* GraphQL */ `subscription OnCreateRole(
   $filter: ModelSubscriptionRoleFilterInput
@@ -174,12 +208,30 @@ export const onDeleteCandidate = /* GraphQL */ `subscription OnDeleteCandidate(
   APITypes.OnDeleteCandidateSubscriptionVariables,
   APITypes.OnDeleteCandidateSubscription
 >;
+export const onDeleteFunctionalCompetency = /* GraphQL */ `subscription OnDeleteFunctionalCompetency(
+  $filter: ModelSubscriptionFunctionalCompetencyFilterInput
+) {
+  onDeleteFunctionalCompetency(filter: $filter) {
+    createdAt
+    description
+    id
+    name
+    priority
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteFunctionalCompetencySubscriptionVariables,
+  APITypes.OnDeleteFunctionalCompetencySubscription
+>;
 export const onDeleteGlobalRole = /* GraphQL */ `subscription OnDeleteGlobalRole(
   $filter: ModelSubscriptionGlobalRoleFilterInput
 ) {
   onDeleteGlobalRole(filter: $filter) {
     createdAt
     culturalValueIds
+    description
     functionalCompetencyIds
     id
     name
@@ -232,6 +284,7 @@ export const onDeletePosition = /* GraphQL */ `subscription OnDeletePosition(
     customQuestionIds
     hiringManager
     id
+    interviewProcessId
     name
     notifications
     owner
@@ -247,6 +300,21 @@ export const onDeletePosition = /* GraphQL */ `subscription OnDeletePosition(
 ` as GeneratedSubscription<
   APITypes.OnDeletePositionSubscriptionVariables,
   APITypes.OnDeletePositionSubscription
+>;
+export const onDeleteQuestion = /* GraphQL */ `subscription OnDeleteQuestion($filter: ModelSubscriptionQuestionFilterInput) {
+  onDeleteQuestion(filter: $filter) {
+    competencyId
+    createdAt
+    id
+    roleId
+    text
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteQuestionSubscriptionVariables,
+  APITypes.OnDeleteQuestionSubscription
 >;
 export const onDeleteRole = /* GraphQL */ `subscription OnDeleteRole(
   $filter: ModelSubscriptionRoleFilterInput
@@ -307,12 +375,30 @@ export const onUpdateCandidate = /* GraphQL */ `subscription OnUpdateCandidate(
   APITypes.OnUpdateCandidateSubscriptionVariables,
   APITypes.OnUpdateCandidateSubscription
 >;
+export const onUpdateFunctionalCompetency = /* GraphQL */ `subscription OnUpdateFunctionalCompetency(
+  $filter: ModelSubscriptionFunctionalCompetencyFilterInput
+) {
+  onUpdateFunctionalCompetency(filter: $filter) {
+    createdAt
+    description
+    id
+    name
+    priority
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateFunctionalCompetencySubscriptionVariables,
+  APITypes.OnUpdateFunctionalCompetencySubscription
+>;
 export const onUpdateGlobalRole = /* GraphQL */ `subscription OnUpdateGlobalRole(
   $filter: ModelSubscriptionGlobalRoleFilterInput
 ) {
   onUpdateGlobalRole(filter: $filter) {
     createdAt
     culturalValueIds
+    description
     functionalCompetencyIds
     id
     name
@@ -365,6 +451,7 @@ export const onUpdatePosition = /* GraphQL */ `subscription OnUpdatePosition(
     customQuestionIds
     hiringManager
     id
+    interviewProcessId
     name
     notifications
     owner
@@ -380,6 +467,21 @@ export const onUpdatePosition = /* GraphQL */ `subscription OnUpdatePosition(
 ` as GeneratedSubscription<
   APITypes.OnUpdatePositionSubscriptionVariables,
   APITypes.OnUpdatePositionSubscription
+>;
+export const onUpdateQuestion = /* GraphQL */ `subscription OnUpdateQuestion($filter: ModelSubscriptionQuestionFilterInput) {
+  onUpdateQuestion(filter: $filter) {
+    competencyId
+    createdAt
+    id
+    roleId
+    text
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateQuestionSubscriptionVariables,
+  APITypes.OnUpdateQuestionSubscription
 >;
 export const onUpdateRole = /* GraphQL */ `subscription OnUpdateRole(
   $filter: ModelSubscriptionRoleFilterInput

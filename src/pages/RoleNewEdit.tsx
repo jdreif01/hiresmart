@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
-import { withAuthenticator } from '@aws-amplify/ui-react';
 import { generateClient } from '@aws-amplify/api';
-import { Flex, Heading, TextField, Button, SelectField, Text } from '@aws-amplify/ui-react';
+import { Flex, Heading, TextField, Button, SelectField, Text, View, Icon } from '@aws-amplify/ui-react';
 import { getRole, listRoles } from '../graphql/queries';
 import { createRole, updateRole } from '../graphql/mutations';
+import { MdArrowBack } from 'react-icons/md';
 
 const client = generateClient();
 
@@ -85,7 +85,7 @@ const RoleNewEdit: React.FC = () => {
         id: role.id,
         tenantId,
         name: role.name,
-        baseRoleId: role.baseRoleId,
+        baseRoleId: '',
         functionalCompetencyIds: role.functionalCompetencyIds || [],
         culturalValueIds: role.culturalValueIds || [],
         questionIds: role.questionIds || [],
@@ -120,43 +120,42 @@ const RoleNewEdit: React.FC = () => {
   }
 
   return (
-    <Flex direction="column" padding="20px">
-      <Heading level={1}>{id ? 'Edit Role' : 'New Role'}</Heading>
-      {errorMessage && <Text color="red">{errorMessage}</Text>}
-      <TextField
-        label="Role Name"
-        value={role.name}
-        onChange={(e) => handleInputChange('name', e.target.value)}
-      />
-      <TextField
-        label="Base Role ID"
-        value={role.baseRoleId}
-        onChange={(e) => handleInputChange('baseRoleId', e.target.value)}
-      />
-      <SelectField
-        label="Status"
-        value={role.status}
-        onChange={(e) => handleInputChange('status', e.target.value)}
-      >
-        <option value="Draft">Draft</option>
-        <option value="Approved">Approved</option>
-        <option value="Closed">Closed</option>
-      </SelectField>
-      <TextField
-        label="Approver Email"
-        value={role.approver}
-        onChange={(e) => handleInputChange('approver', e.target.value)}
-      />
-      <Button variation="primary" onClick={handleSave}>
-        Save Role
-      </Button>
-    </Flex>
+    <View padding="space.xl" backgroundColor="background.primary" paddingTop="space.xxxl">
+      <Flex direction="column" gap="space.medium" maxWidth="600px" margin="0 auto">
+        <Flex alignItems="center" gap="space.small">
+          <Button variation="link" onClick={() => navigate('/roles')} padding="0">
+            <Icon as={MdArrowBack} fontSize="1.5rem" color="brand.primary" />
+          </Button>
+          <Heading level={1}>{id ? 'Edit Role' : 'New Role'}</Heading>
+        </Flex>
+        {errorMessage && <Text color="red">{errorMessage}</Text>}
+        <Flex direction="column" gap="space.medium" padding="space.medium" backgroundColor="background.secondary">
+          <TextField
+            label="Role Name"
+            value={role.name}
+            onChange={(e) => handleInputChange('name', e.target.value)}
+          />
+          <SelectField
+            label="Status"
+            value={role.status}
+            onChange={(e) => handleInputChange('status', e.target.value)}
+          >
+            <option value="Draft">Draft</option>
+            <option value="Approved">Approved</option>
+            <option value="Closed">Closed</option>
+          </SelectField>
+          <TextField
+            label="Approver Email"
+            value={role.approver}
+            onChange={(e) => handleInputChange('approver', e.target.value)}
+          />
+          <Button variation="primary" alignSelf="flex-end" onClick={handleSave}>
+            Save Role
+          </Button>
+        </Flex>
+      </Flex>
+    </View>
   );
 };
 
-export default withAuthenticator(RoleNewEdit, {
-  socialProviders: ['google'],
-  loginMechanisms: [],
-  signUpAttributes: [],
-  hideSignUp: true
-});
+export default RoleNewEdit;

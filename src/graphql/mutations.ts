@@ -34,6 +34,24 @@ export const createCandidate = /* GraphQL */ `mutation CreateCandidate(
   APITypes.CreateCandidateMutationVariables,
   APITypes.CreateCandidateMutation
 >;
+export const createFunctionalCompetency = /* GraphQL */ `mutation CreateFunctionalCompetency(
+  $condition: ModelFunctionalCompetencyConditionInput
+  $input: CreateFunctionalCompetencyInput!
+) {
+  createFunctionalCompetency(condition: $condition, input: $input) {
+    createdAt
+    description
+    id
+    name
+    priority
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateFunctionalCompetencyMutationVariables,
+  APITypes.CreateFunctionalCompetencyMutation
+>;
 export const createGlobalRole = /* GraphQL */ `mutation CreateGlobalRole(
   $condition: ModelGlobalRoleConditionInput
   $input: CreateGlobalRoleInput!
@@ -41,6 +59,7 @@ export const createGlobalRole = /* GraphQL */ `mutation CreateGlobalRole(
   createGlobalRole(condition: $condition, input: $input) {
     createdAt
     culturalValueIds
+    description
     functionalCompetencyIds
     id
     name
@@ -85,6 +104,7 @@ export const createPosition = /* GraphQL */ `mutation CreatePosition(
     customQuestionIds
     hiringManager
     id
+    interviewProcessId
     name
     notifications
     owner
@@ -100,6 +120,24 @@ export const createPosition = /* GraphQL */ `mutation CreatePosition(
 ` as GeneratedMutation<
   APITypes.CreatePositionMutationVariables,
   APITypes.CreatePositionMutation
+>;
+export const createQuestion = /* GraphQL */ `mutation CreateQuestion(
+  $condition: ModelQuestionConditionInput
+  $input: CreateQuestionInput!
+) {
+  createQuestion(condition: $condition, input: $input) {
+    competencyId
+    createdAt
+    id
+    roleId
+    text
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateQuestionMutationVariables,
+  APITypes.CreateQuestionMutation
 >;
 export const createRole = /* GraphQL */ `mutation CreateRole(
   $condition: ModelRoleConditionInput
@@ -152,6 +190,24 @@ export const deleteCandidate = /* GraphQL */ `mutation DeleteCandidate(
   APITypes.DeleteCandidateMutationVariables,
   APITypes.DeleteCandidateMutation
 >;
+export const deleteFunctionalCompetency = /* GraphQL */ `mutation DeleteFunctionalCompetency(
+  $condition: ModelFunctionalCompetencyConditionInput
+  $input: DeleteFunctionalCompetencyInput!
+) {
+  deleteFunctionalCompetency(condition: $condition, input: $input) {
+    createdAt
+    description
+    id
+    name
+    priority
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteFunctionalCompetencyMutationVariables,
+  APITypes.DeleteFunctionalCompetencyMutation
+>;
 export const deleteGlobalRole = /* GraphQL */ `mutation DeleteGlobalRole(
   $condition: ModelGlobalRoleConditionInput
   $input: DeleteGlobalRoleInput!
@@ -159,6 +215,7 @@ export const deleteGlobalRole = /* GraphQL */ `mutation DeleteGlobalRole(
   deleteGlobalRole(condition: $condition, input: $input) {
     createdAt
     culturalValueIds
+    description
     functionalCompetencyIds
     id
     name
@@ -203,6 +260,7 @@ export const deletePosition = /* GraphQL */ `mutation DeletePosition(
     customQuestionIds
     hiringManager
     id
+    interviewProcessId
     name
     notifications
     owner
@@ -218,6 +276,24 @@ export const deletePosition = /* GraphQL */ `mutation DeletePosition(
 ` as GeneratedMutation<
   APITypes.DeletePositionMutationVariables,
   APITypes.DeletePositionMutation
+>;
+export const deleteQuestion = /* GraphQL */ `mutation DeleteQuestion(
+  $condition: ModelQuestionConditionInput
+  $input: DeleteQuestionInput!
+) {
+  deleteQuestion(condition: $condition, input: $input) {
+    competencyId
+    createdAt
+    id
+    roleId
+    text
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteQuestionMutationVariables,
+  APITypes.DeleteQuestionMutation
 >;
 export const deleteRole = /* GraphQL */ `mutation DeleteRole(
   $condition: ModelRoleConditionInput
@@ -270,6 +346,24 @@ export const updateCandidate = /* GraphQL */ `mutation UpdateCandidate(
   APITypes.UpdateCandidateMutationVariables,
   APITypes.UpdateCandidateMutation
 >;
+export const updateFunctionalCompetency = /* GraphQL */ `mutation UpdateFunctionalCompetency(
+  $condition: ModelFunctionalCompetencyConditionInput
+  $input: UpdateFunctionalCompetencyInput!
+) {
+  updateFunctionalCompetency(condition: $condition, input: $input) {
+    createdAt
+    description
+    id
+    name
+    priority
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateFunctionalCompetencyMutationVariables,
+  APITypes.UpdateFunctionalCompetencyMutation
+>;
 export const updateGlobalRole = /* GraphQL */ `mutation UpdateGlobalRole(
   $condition: ModelGlobalRoleConditionInput
   $input: UpdateGlobalRoleInput!
@@ -277,6 +371,7 @@ export const updateGlobalRole = /* GraphQL */ `mutation UpdateGlobalRole(
   updateGlobalRole(condition: $condition, input: $input) {
     createdAt
     culturalValueIds
+    description
     functionalCompetencyIds
     id
     name
@@ -321,6 +416,7 @@ export const updatePosition = /* GraphQL */ `mutation UpdatePosition(
     customQuestionIds
     hiringManager
     id
+    interviewProcessId
     name
     notifications
     owner
@@ -336,6 +432,24 @@ export const updatePosition = /* GraphQL */ `mutation UpdatePosition(
 ` as GeneratedMutation<
   APITypes.UpdatePositionMutationVariables,
   APITypes.UpdatePositionMutation
+>;
+export const updateQuestion = /* GraphQL */ `mutation UpdateQuestion(
+  $condition: ModelQuestionConditionInput
+  $input: UpdateQuestionInput!
+) {
+  updateQuestion(condition: $condition, input: $input) {
+    competencyId
+    createdAt
+    id
+    roleId
+    text
+    updatedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateQuestionMutationVariables,
+  APITypes.UpdateQuestionMutation
 >;
 export const updateRole = /* GraphQL */ `mutation UpdateRole(
   $condition: ModelRoleConditionInput
