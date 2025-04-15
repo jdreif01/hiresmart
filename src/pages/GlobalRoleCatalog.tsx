@@ -1,11 +1,12 @@
-// src/pages/GlobalRoleCatalog.tsx
-import React, { useState, useEffect, ChangeEvent } from 'react';
+// hiresmart/src/pages/GlobalRoleCatalog.tsx
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
 import { generateClient } from '@aws-amplify/api';
-import { Flex, Heading, Card, Text, Button, TextField, SelectField, Alert, View, Icon } from '@aws-amplify/ui-react';
+import { Flex, Heading, Card, Text, Button, TextField, SelectField, Alert, View, Icon, Pagination } from '@aws-amplify/ui-react';
 import { MdAdd, MdEdit } from 'react-icons/md';
-import type { Schema } from '../../amplify/data/resource'; // Adjust path based on your project structure
+import Select from 'react-select';
+import type { Schema } from '../../amplify/data/resource';
 
 const client = generateClient<Schema>();
 
@@ -24,6 +25,11 @@ interface Question {
   competencyId: string;
 }
 
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
 const GlobalRoleCatalog: React.FC = () => {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -36,7 +42,7 @@ const GlobalRoleCatalog: React.FC = () => {
     description: '',
     functionalCompetencyIds: [] as string[],
     questionIds: [] as string[],
-    culturalValueIds: [] as string[], // Not used in this use case, but part of schema
+    culturalValueIds: [] as string[],
   });
   const [selectedCompetencies, setSelectedCompetencies] = useState<Competency[]>([]);
   const [newCompetency, setNewCompetency] = useState({
@@ -47,6 +53,8 @@ const GlobalRoleCatalog: React.FC = () => {
   const [aiQuestions, setAiQuestions] = useState<Question[]>([]);
   const [showAddCompetency, setShowAddCompetency] = useState(false);
   const [duplicateWarning, setDuplicateWarning] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const rolesPerPage = 6;
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -79,7 +87,11 @@ const GlobalRoleCatalog: React.FC = () => {
         // Fetch existing global roles
         const rolesResponse = await client.models.GlobalRole.list();
         const roles = rolesResponse.data || [];
-        setGlobalRoles(roles);
+        // Sort roles alphabetically by name (case-insensitive)
+        const sortedRoles = roles.sort((a, b) =>
+          a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+        );
+        setGlobalRoles(sortedRoles);
 
         // Fetch existing competencies
         const competenciesResponse = await client.models.FunctionalCompetency.list();
@@ -180,7 +192,11 @@ const GlobalRoleCatalog: React.FC = () => {
           });
         }
 
-        setGlobalRoles([...globalRoles, createdRole]);
+        // Add the new role and re-sort the list
+        const updatedRoles = [...globalRoles, createdRole].sort((a, b) =>
+          a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+        );
+        setGlobalRoles(updatedRoles);
         setNewRole({ name: '', description: '', functionalCompetencyIds: [], questionIds: [], culturalValueIds: [] });
         setSelectedCompetencies([]);
         setAiQuestions([]);
@@ -194,7 +210,7 @@ const GlobalRoleCatalog: React.FC = () => {
 
   const handleDuplicateProceed = async () => {
     setDuplicateWarning(null);
-    await handleSaveRole(); // Proceed with saving
+    await handleSaveRole();
   };
 
   const handleDuplicateRename = () => {
@@ -202,10 +218,37 @@ const GlobalRoleCatalog: React.FC = () => {
     // Allow user to edit the name
   };
 
-  const handleCompetencyChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const selectedIds = Array.from(e.target.selectedOptions).map((option) => option.value);
+  const handleCompetencyChange = (selectedOptions: SelectOption[]) => {
+    const selectedIds = selectedOptions.map(option => option.value);
     const selected = competencies.filter((comp: Competency) => selectedIds.includes(comp.id));
     setSelectedCompetencies(selected);
+  };
+
+  // Pagination logic
+  const totalPages = Math.ceil(globalRoles.length / rolesPerPage);
+  const startIndex = (currentPage - 1) * rolesPerPage;
+  const endIndex = startIndex + rolesPerPage;
+  const currentRoles = globalRoles.slice(startIndex, endIndex);
+
+  const handlePageChange = (newPageIndex?: number, prevPageIndex?: number) => {
+    console.log('handlePageChange called with:', { newPageIndex, prevPageIndex });
+    if (newPageIndex !== undefined) {
+      setCurrentPage(newPageIndex);
+    }
+  };
+
+  const handleNextPage = () => {
+    console.log('handleNextPage called, currentPage:', currentPage);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    console.log('handlePreviousPage called, currentPage:', currentPage);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   if (!isAuthenticated) {
@@ -238,24 +281,39 @@ const GlobalRoleCatalog: React.FC = () => {
         {globalRoles.length === 0 ? (
           <Text>No roles found. Add a new role below.</Text>
         ) : (
-          globalRoles.map((role) => (
-            <Card key={role.id} variation="elevated">
-              <Flex direction="row" alignItems="center" justifyContent="space-between">
-                <Flex direction="column" gap="space.xs">
-                  <Text fontSize="large" fontWeight="500">
-                    {role.name}
-                  </Text>
-                  <Text fontSize="medium" color="font.secondary">
-                    {role.description || 'No description provided'}
-                  </Text>
-                </Flex>
-                <Button variation="primary" onClick={() => navigate(`/global-role/${role.id}`)}>
-                  <Icon as={MdEdit} />
-                  Edit
-                </Button>
+          <>
+            <Flex direction="row" wrap="wrap" gap="space.medium" justifyContent="center">
+              {currentRoles.map((role) => (
+                <Card key={role.id} variation="elevated" width={{ base: '100%', medium: '300px' }}>
+                  <Flex direction="row" alignItems="center" justifyContent="space-between">
+                    <Flex direction="column" gap="space.xs">
+                      <Text fontSize="large" fontWeight="500">
+                        {role.name}
+                      </Text>
+                      <Text fontSize="medium" color="font.secondary">
+                        {role.description || 'No description provided'}
+                      </Text>
+                    </Flex>
+                    <Button variation="primary" onClick={() => navigate(`/global-role/${role.id}`)}>
+                      <Icon as={MdEdit} />
+                      Edit
+                    </Button>
+                  </Flex>
+                </Card>
+              ))}
+            </Flex>
+            {totalPages > 1 && (
+              <Flex justifyContent="center" marginTop="space.medium">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onChange={handlePageChange}
+                  onNext={handleNextPage}
+                  onPrevious={handlePreviousPage}
+                />
               </Flex>
-            </Card>
-          ))
+            )}
+          </>
         )}
       </Flex>
       <Flex direction="column" gap="space.medium" padding="space.medium" backgroundColor="background.secondary">
@@ -275,18 +333,25 @@ const GlobalRoleCatalog: React.FC = () => {
           <Button variation="primary" onClick={handleSuggestCompetencies}>
             Suggest Competencies
           </Button>
-          <SelectField
-            label="Select Competencies"
-            multiple
-            value={selectedCompetencies.map((comp) => comp.id) as any} // Type assertion to bypass type error
-            onChange={handleCompetencyChange} // Updated handler
-          >
-            {competencies.map((comp) => (
-              <option key={comp.id} value={comp.id}>
-                {comp.name} (Priority: {comp.priority || 'Not set'})
-              </option>
-            ))}
-          </SelectField>
+          <Select
+            options={competencies.map((comp) => ({
+              value: comp.id,
+              label: `${comp.name} (Priority: ${comp.priority || 'Not set'})`,
+            }))}
+            isMulti
+            value={selectedCompetencies.map((comp) => ({
+              value: comp.id,
+              label: `${comp.name} (Priority: ${comp.priority || 'Not set'})`,
+            }))}
+            onChange={(selectedOptions) => handleCompetencyChange(selectedOptions as SelectOption[])}
+            placeholder="Select Competencies"
+            styles={{
+              control: (base) => ({
+                ...base,
+                marginBottom: '10px',
+              }),
+            }}
+          />
           <Button variation="link" onClick={() => setShowAddCompetency(!showAddCompetency)}>
             {showAddCompetency ? 'Cancel' : 'Add New Competency'}
           </Button>

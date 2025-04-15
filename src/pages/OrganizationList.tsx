@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
-import { generateClient } from '@aws-amplify/api';
-import { withAuthenticator } from '@aws-amplify/ui-react';
-import { Flex, Heading, Table, TableCell, TableHead, TableBody, TableRow, Text } from '@aws-amplify/ui-react';
-import { listOrganizationByTenantId } from '../graphql/queries';
+// hiresmart/src/pages/OrganizationList.tsx
+import React, { useEffect, useState } from 'react';
+import { generateClient } from '@aws-amplify/api'; // Correct import for Amplify v6+
+import { listOrganizations } from '../graphql/queries'; // Use the standard list query
+import { ListOrganizationsQuery } from '../graphql/API';
+import { Flex, Heading, Table, TableCell, TableHead, TableBody, TableRow, Text, Button } from '@aws-amplify/ui-react';
+import { useNavigate } from 'react-router-dom';
 
 const client = generateClient();
 
@@ -15,108 +16,85 @@ interface Organization {
 }
 
 const OrganizationList: React.FC = () => {
+  const navigate = useNavigate();
   const [organizations, setOrganizations] = useState<Organization[]>([]);
-  const [tenantId, setTenantId] = useState<string>('');
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   useEffect(() => {
-    const initializeAuth = async () => {
-      try {
-        const user = await getCurrentUser();
-        const session = await fetchAuthSession();
-        console.log('Authenticated user:', user);
-        console.log('Username (cognito:username):', user.username);
-        console.log('User session:', session);
-        console.log('Access token:', session.tokens?.accessToken?.toString());
-        console.log('ID token:', session.tokens?.idToken?.toString());
-        const idTokenPayload = session.tokens?.idToken?.payload;
-        console.log('ID Token Payload:', idTokenPayload);
-        const tenant = idTokenPayload?.['custom:tenantId'] as string;
-        console.log('Fetched tenantId:', tenant);
-        if (!tenant) {
-          console.error('custom:tenantId not found in ID token payload');
-        }
-        setTenantId(tenant || '');
-        setIsAuthenticated(true);
-      } catch (error) {
-        console.error('Error fetching tenantId:', error);
-        setIsAuthenticated(false);
-      }
-    };
-
-    initializeAuth();
-  }, []);
-
-  useEffect(() => {
     const fetchOrganizations = async () => {
-      if (!tenantId || !isAuthenticated) {
-        console.log('tenantId or authentication not ready, skipping fetchOrganizations');
-        return;
-      }
-
       try {
-        console.log('Fetching organizations for tenantId:', tenantId);
-        const response = await client.graphql({
-          query: listOrganizationByTenantId,
-          variables: {
-            tenantId: tenantId
-          },
+        setLoading(true);
+        const response = await client.graphql<ListOrganizationsQuery>({
+          query: listOrganizations,
           authMode: 'userPool'
-        }) as any;
-        console.log('GraphQL response:', response);
-        const items = response.data?.listOrganizationByTenantId?.items || [];
+        }) as { data: ListOrganizationsQuery };
+
+        const items = response.data?.listOrganizations?.items || [];
         console.log('Fetched items:', items);
         if (items.length === 0) {
-          setErrorMessage('No organizations found for this tenant.');
+          setErrorMessage('No organizations found.');
         } else {
-          const orgs = items.map((item: any) => ({
-            id: item.id,
-            name: item.name,
-            ssoConfig: item.ssoConfig,
-            tenantId: item.tenantId
-          }));
+          const orgs = items
+            .filter((item): item is NonNullable<typeof item> => item !== null)
+            .map((item: any) => ({
+              id: item.id,
+              name: item.name,
+              ssoConfig: item.ssoConfig || '',
+              tenantId: item.tenantId || '',
+            }));
           setOrganizations(orgs);
           setErrorMessage('');
         }
       } catch (error) {
         console.error('Error fetching organizations:', error);
         setErrorMessage('Failed to fetch organizations. Please try again.');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchOrganizations();
-  }, [tenantId, isAuthenticated]);
+  }, []);
 
   return (
     <Flex direction="column" padding="20px">
       <Heading level={1}>Organizations</Heading>
       {errorMessage && <Text color="red">{errorMessage}</Text>}
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>SSO Provider</TableCell>
-            <TableCell>Tenant ID</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {organizations.map(org => (
-            <TableRow key={org.id}>
-              <TableCell>{org.name}</TableCell>
-              <TableCell>{org.ssoConfig ? JSON.parse(org.ssoConfig).provider : 'N/A'}</TableCell>
-              <TableCell>{org.tenantId}</TableCell>
+      {loading ? (
+        <Text>Loading organizations...</Text>
+      ) : (
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>SSO Provider</TableCell>
+              <TableCell>Tenant ID</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHead>
+          <TableBody>
+            {organizations.map(org => (
+              <TableRow key={org.id}>
+                <TableCell>{org.name}</TableCell>
+                <TableCell>{org.ssoConfig ? JSON.parse(org.ssoConfig).provider : 'N/A'}</TableCell>
+                <TableCell>{org.tenantId}</TableCell>
+                <TableCell>
+                  <Button
+                    variation="primary"
+                    size="small"
+                    onClick={() => navigate(`/organization-settings/${org.id}`)}
+                  >
+                    View Details
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </Flex>
   );
 };
 
-export default withAuthenticator(OrganizationList, {
-  socialProviders: ['google'],
-  loginMechanisms: [],
-  signUpAttributes: [],
-  hideSignUp: true
-});
+export default OrganizationList;

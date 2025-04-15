@@ -1,16 +1,17 @@
-// src/App.tsx
-import React from 'react';
+// hiresmart/src/App.tsx
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Authenticator, ThemeProvider } from '@aws-amplify/ui-react';
+import { Authenticator, ThemeProvider, Flex, Heading, Text } from '@aws-amplify/ui-react';
+import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
 import RolesList from './pages/RolesList';
 import PositionsList from './pages/PositionsList';
 import RoleNewEdit from './pages/RoleNewEdit';
 import PositionNewEdit from './pages/PositionNewEdit';
-import GlobalRoleCatalog from './pages/GlobalRoleCatalog'; // Added new page
+import GlobalRoleCatalog from './pages/GlobalRoleCatalog';
+import OrganizationList from './pages/OrganizationList.tsx';
 import Logo from './assets/logo-only.svg?react';
-import { Flex, Heading, Text } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 // Define a comprehensive theme following Amplify UI best practices
@@ -160,6 +161,77 @@ const theme = {
 };
 
 const App: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAppAdmin, setIsAppAdmin] = useState<boolean>(false);
+  const [isOrgAdmin, setIsOrgAdmin] = useState<boolean>(false);
+  const [isHiringManager, setIsHiringManager] = useState<boolean>(false);
+  const [isRecruiter, setIsRecruiter] = useState<boolean>(false);
+  const [isInterviewer, setIsInterviewer] = useState<boolean>(false);
+  const [isFacilitator, setIsFacilitator] = useState<boolean>(false);
+  const [isCandidate, setIsCandidate] = useState<boolean>(false);
+  const [tenantId, setTenantId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await getCurrentUser();
+        setIsAuthenticated(true);
+        const session = await fetchAuthSession();
+        const groups = session.tokens?.idToken?.payload['cognito:groups'] as string[] | undefined;
+        setIsAppAdmin(groups?.includes('AppAdmins') || false);
+        setIsOrgAdmin(groups?.includes('OrgAdmins') || false);
+        setIsHiringManager(groups?.includes('HiringManagers') || false);
+        setIsRecruiter(groups?.includes('Recruiters') || false);
+        setIsInterviewer(groups?.includes('Interviewers') || false);
+        setIsFacilitator(groups?.includes('Facilitators') || false);
+        setIsCandidate(groups?.includes('Candidates') || false);
+        const tenantIdValue = session.tokens?.idToken?.payload['custom:tenantId'];
+        setTenantId(typeof tenantIdValue === 'string' ? tenantIdValue : null);
+      } catch (error) {
+        console.error('Error checking authentication:', error);
+        setIsAuthenticated(false);
+        setIsAppAdmin(false);
+        setIsOrgAdmin(false);
+        setIsHiringManager(false);
+        setIsRecruiter(false);
+        setIsInterviewer(false);
+        setIsFacilitator(false);
+        setIsCandidate(false);
+        setTenantId(null);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  // Protected route component
+  const ProtectedRoute: React.FC<{
+    element: React.ReactElement;
+    allowedGroups?: string[];
+    redirectTo?: string;
+    requireTenantId?: boolean;
+  }> = ({ element, allowedGroups, redirectTo = '/', requireTenantId = false }) => {
+    if (!isAuthenticated) {
+      return <Navigate to="/login" replace />;
+    }
+    if (requireTenantId && !tenantId) {
+      return <Navigate to="/organization-list" replace />;
+    }
+    if (allowedGroups && !allowedGroups.some(group => {
+      if (group === 'AppAdmins') return isAppAdmin;
+      if (group === 'OrgAdmins') return isOrgAdmin;
+      if (group === 'HiringManagers') return isHiringManager;
+      if (group === 'Recruiters') return isRecruiter;
+      if (group === 'Interviewers') return isInterviewer;
+      if (group === 'Facilitators') return isFacilitator;
+      if (group === 'Candidates') return isCandidate;
+      return false;
+    })) {
+      return <Navigate to={redirectTo} replace />;
+    }
+    return element;
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Authenticator
@@ -195,15 +267,55 @@ const App: React.FC = () => {
                 <Layout>
                   <Routes>
                     <Route path="/" element={<HomePage />} />
-                    <Route path="/organization-list" element={<Navigate to="/" replace />} />
-                    <Route path="/roles" element={<RolesList />} />
-                    <Route path="/role/new" element={<RoleNewEdit />} />
-                    <Route path="/role/:id" element={<RoleNewEdit />} />
-                    <Route path="/positions" element={<PositionsList />} />
-                    <Route path="/position/new" element={<PositionNewEdit />} />
-                    <Route path="/position/:id" element={<PositionNewEdit />} />
-                    <Route path="/global-role-catalog" element={<GlobalRoleCatalog />} /> {/* Added new route */}
-                    <Route path="/global-role/:id" element={<div>Edit Global Role (TBD)</div>} /> {/* Placeholder for editing */}
+                    <Route
+                      path="/organization-list"
+                      element={<ProtectedRoute element={<OrganizationList />} allowedGroups={['AppAdmins']} />}
+                    />
+                    <Route
+                      path="/roles"
+                      element={<ProtectedRoute element={<RolesList />} allowedGroups={['OrgAdmins', 'HiringManagers', 'Recruiters']} requireTenantId />}
+                    />
+                    <Route
+                      path="/role/new"
+                      element={<ProtectedRoute element={<RoleNewEdit />} allowedGroups={['OrgAdmins', 'HiringManagers', 'Recruiters']} requireTenantId />}
+                    />
+                    <Route
+                      path="/role/:id"
+                      element={<ProtectedRoute element={<RoleNewEdit />} allowedGroups={['OrgAdmins', 'HiringManagers', 'Recruiters']} requireTenantId />}
+                    />
+                    <Route
+                      path="/positions"
+                      element={<ProtectedRoute element={<PositionsList />} allowedGroups={['OrgAdmins', 'HiringManagers', 'Recruiters']} requireTenantId />}
+                    />
+                    <Route
+                      path="/position/new"
+                      element={<ProtectedRoute element={<PositionNewEdit />} allowedGroups={['OrgAdmins', 'HiringManagers', 'Recruiters']} requireTenantId />}
+                    />
+                    <Route
+                      path="/position/:id"
+                      element={<ProtectedRoute element={<PositionNewEdit />} allowedGroups={['OrgAdmins', 'HiringManagers', 'Recruiters']} requireTenantId />}
+                    />
+                    <Route
+                      path="/global-role-catalog"
+                      element={<ProtectedRoute element={<GlobalRoleCatalog />} allowedGroups={['AppAdmins']} />}
+                    />
+                    <Route
+                      path="/global-role/:id"
+                      element={<ProtectedRoute element={<div>Edit Global Role (TBD)</div>} allowedGroups={['AppAdmins']} />}
+                    />
+                    <Route
+                      path="/organization-settings"
+                      element={<ProtectedRoute element={<div>Organization Settings (To Be Implemented)</div>} allowedGroups={['OrgAdmins']} requireTenantId />}
+                    />
+                    <Route
+                      path="/interviews"
+                      element={<ProtectedRoute element={<div>Interviews (To Be Implemented)</div>} allowedGroups={['HiringManagers', 'Recruiters', 'Interviewers', 'Facilitators']} requireTenantId />}
+                    />
+                    <Route
+                      path="/candidate-portal"
+                      element={<ProtectedRoute element={<div>Candidate Portal (To Be Implemented)</div>} allowedGroups={['Candidates']} />}
+                    />
+                    <Route path="/login" element={<div>Login Page (Not Needed with Authenticator)</div>} />
                   </Routes>
                 </Layout>
               }

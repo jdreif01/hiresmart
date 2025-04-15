@@ -1,8 +1,9 @@
+// hiresmart/src/pages/PositionsList.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
 import { generateClient } from '@aws-amplify/api';
-import { Flex, Heading, Card, Text, Button, View } from '@aws-amplify/ui-react';
+import { Flex, Heading, Card, Text, Button, View, Pagination } from '@aws-amplify/ui-react';
 import { listPositions } from '../graphql/queries';
 
 const client = generateClient();
@@ -13,6 +14,8 @@ const PositionsList: React.FC = () => {
   const [tenantId, setTenantId] = useState<string>('');
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const positionsPerPage = 6;
 
   useEffect(() => {
     const initializeAuth = async () => {
@@ -58,7 +61,11 @@ const PositionsList: React.FC = () => {
         if (items.length === 0) {
           setErrorMessage('No positions found for this tenant.');
         } else {
-          setPositions(items);
+          // Sort positions alphabetically by name (case-insensitive)
+          const sortedPositions = items.sort((a, b) =>
+            a.name.localeCompare(b.name, undefined, { sensitivity: 'base' })
+          );
+          setPositions(sortedPositions);
           setErrorMessage('');
         }
       } catch (error) {
@@ -69,6 +76,33 @@ const PositionsList: React.FC = () => {
 
     fetchPositions();
   }, [tenantId, isAuthenticated]);
+
+  // Pagination logic
+  const totalPages = Math.ceil(positions.length / positionsPerPage);
+  const startIndex = (currentPage - 1) * positionsPerPage;
+  const endIndex = startIndex + positionsPerPage;
+  const currentPositions = positions.slice(startIndex, endIndex);
+
+  const handlePageChange = (newPageIndex?: number, prevPageIndex?: number) => {
+    console.log('handlePageChange called with:', { newPageIndex, prevPageIndex });
+    if (newPageIndex !== undefined) {
+      setCurrentPage(newPageIndex);
+    }
+  };
+
+  const handleNextPage = () => {
+    console.log('handleNextPage called, currentPage:', currentPage);
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    console.log('handlePreviousPage called, currentPage:', currentPage);
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
   if (!isAuthenticated) {
     return <Text>Loading...</Text>;
@@ -89,14 +123,23 @@ const PositionsList: React.FC = () => {
             No positions found. Create a new position to get started.
           </Text>
         ) : (
-          <Flex direction="column" gap="space.medium">
-            {positions.map((position) => (
-              <Card key={position.id} variation="elevated">
-                <Flex direction="row" alignItems="center" justifyContent="space-between">
+          <>
+            <Flex direction="row" wrap="wrap" gap="space.medium" justifyContent="center">
+              {currentPositions.map((position) => (
+                <Card key={position.id} variation="elevated" padding="space.medium" width={{ base: '100%', medium: '300px' }}>
                   <Flex direction="column" gap="space.xs">
-                    <Text fontSize="large" fontWeight="500">
-                      {position.name}
-                    </Text>
+                    <Flex direction="row" justifyContent="space-between" alignItems="center">
+                      <Text fontSize="large" fontWeight="500">
+                        {position.name}
+                      </Text>
+                      <Button
+                        variation="primary"
+                        size="small"
+                        onClick={() => navigate(`/position/${position.id}`)}
+                      >
+                        Edit
+                      </Button>
+                    </Flex>
                     <Text fontSize="medium" color="font.secondary">
                       Position Status: {position.positionStatus}
                     </Text>
@@ -107,13 +150,21 @@ const PositionsList: React.FC = () => {
                       Approver: {position.approver}
                     </Text>
                   </Flex>
-                  <Button variation="primary" onClick={() => navigate(`/position/${position.id}`)}>
-                    Edit
-                  </Button>
-                </Flex>
-              </Card>
-            ))}
-          </Flex>
+                </Card>
+              ))}
+            </Flex>
+            {totalPages > 1 && (
+              <Flex justifyContent="center" marginTop="space.medium">
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onChange={handlePageChange}
+                  onNext={handleNextPage}
+                  onPrevious={handlePreviousPage}
+                />
+              </Flex>
+            )}
+          </>
         )}
       </Flex>
     </View>

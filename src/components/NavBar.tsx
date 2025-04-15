@@ -1,29 +1,47 @@
-// src/components/NavBar.tsx
+// hiresmart/src/components/NavBar.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signOut, getCurrentUser, fetchAuthSession } from '@aws-amplify/auth';
 import { View, Flex, Button, Icon, Text } from '@aws-amplify/ui-react';
-import { MdHome, MdWork, MdPeople, MdLogout, MdSettings } from 'react-icons/md';
+import { MdHome, MdWork, MdPeople, MdLogout, MdSettings, MdEvent, MdPerson } from 'react-icons/md';
 import Logo from '../assets/logo-only.svg?react';
 
 const NavBar: React.FC = () => {
   const navigate = useNavigate();
   const [isAppAdmin, setIsAppAdmin] = useState<boolean>(false);
+  const [isOrgAdmin, setIsOrgAdmin] = useState<boolean>(false);
+  const [isHiringManager, setIsHiringManager] = useState<boolean>(false);
+  const [isRecruiter, setIsRecruiter] = useState<boolean>(false);
+  const [isInterviewer, setIsInterviewer] = useState<boolean>(false);
+  const [isFacilitator, setIsFacilitator] = useState<boolean>(false);
+  const [isCandidate, setIsCandidate] = useState<boolean>(false);
 
   useEffect(() => {
-    const checkAdminStatus = async () => {
+    const checkUserGroups = async () => {
       try {
         await getCurrentUser();
         const session = await fetchAuthSession();
         const groups = session.tokens?.idToken?.payload['cognito:groups'] as string[] | undefined;
-        const isAdmin = groups?.includes('AppAdmins') || false;
-        setIsAppAdmin(isAdmin);
+        setIsAppAdmin(groups?.includes('AppAdmins') || false);
+        setIsOrgAdmin(groups?.includes('OrgAdmins') || false);
+        setIsHiringManager(groups?.includes('HiringManagers') || false);
+        setIsRecruiter(groups?.includes('Recruiters') || false);
+        setIsInterviewer(groups?.includes('Interviewers') || false);
+        setIsFacilitator(groups?.includes('Facilitators') || false);
+        setIsCandidate(groups?.includes('Candidates') || false);
       } catch (error) {
-        console.error('Error checking admin status:', error);
+        console.error('Error checking user groups:', error);
+        setIsAppAdmin(false);
+        setIsOrgAdmin(false);
+        setIsHiringManager(false);
+        setIsRecruiter(false);
+        setIsInterviewer(false);
+        setIsFacilitator(false);
+        setIsCandidate(false);
       }
     };
 
-    checkAdminStatus();
+    checkUserGroups();
   }, []);
 
   const handleSignOut = async () => {
@@ -92,26 +110,30 @@ const NavBar: React.FC = () => {
             <Icon as={MdHome} fontSize="1rem" />
             Home
           </Button>
-          <Button
-            variation="primary"
-            onClick={() => navigate('/roles')}
-            gap="space.xs"
-            fontSize="small"
-            padding="space.xs space.small"
-          >
-            <Icon as={MdWork} fontSize="1rem" />
-            Roles
-          </Button>
-          <Button
-            variation="primary"
-            onClick={() => navigate('/positions')}
-            gap="space.xs"
-            fontSize="small"
-            padding="space.xs space.small"
-          >
-            <Icon as={MdPeople} fontSize="1rem" />
-            Positions
-          </Button>
+          {isAppAdmin && (
+            <Button
+              variation="primary"
+              onClick={() => navigate('/organization-list')}
+              gap="space.xs"
+              fontSize="small"
+              padding="space.xs space.small"
+            >
+              <Icon as={MdWork} fontSize="1rem" />
+              Organization List
+            </Button>
+          )}
+          {(isOrgAdmin || isHiringManager || isRecruiter) && (
+            <Button
+              variation="primary"
+              onClick={() => navigate('/positions')}
+              gap="space.xs"
+              fontSize="small"
+              padding="space.xs space.small"
+            >
+              <Icon as={MdPeople} fontSize="1rem" />
+              Positions
+            </Button>
+          )}
           {isAppAdmin && (
             <Button
               variation="primary"
@@ -122,6 +144,42 @@ const NavBar: React.FC = () => {
             >
               <Icon as={MdSettings} fontSize="1rem" />
               Global Roles
+            </Button>
+          )}
+          {isOrgAdmin && (
+            <Button
+              variation="primary"
+              onClick={() => navigate('/organization-settings')}
+              gap="space.xs"
+              fontSize="small"
+              padding="space.xs space.small"
+            >
+              <Icon as={MdSettings} fontSize="1rem" />
+              Org Settings
+            </Button>
+          )}
+          {(isHiringManager || isRecruiter || isInterviewer || isFacilitator) && (
+            <Button
+              variation="primary"
+              onClick={() => navigate('/interviews')}
+              gap="space.xs"
+              fontSize="small"
+              padding="space.xs space.small"
+            >
+              <Icon as={MdEvent} fontSize="1rem" />
+              Interviews
+            </Button>
+          )}
+          {isCandidate && (
+            <Button
+              variation="primary"
+              onClick={() => navigate('/candidate-portal')}
+              gap="space.xs"
+              fontSize="small"
+              padding="space.xs space.small"
+            >
+              <Icon as={MdPerson} fontSize="1rem" />
+              Candidate Portal
             </Button>
           )}
           <Button

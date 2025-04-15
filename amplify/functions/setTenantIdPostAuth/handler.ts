@@ -12,7 +12,7 @@ export const handler = async (event: PostConfirmationTriggerEvent) => {
   const userName: string = event.userName;
   const email: string = event.request.userAttributes.email;
 
-  // Extract tenantId from email domain
+  // Step 1: Extract tenantId from email domain
   let tenantId: string = 'foo'; // Default tenantId if domain extraction fails (indicates an error)
   if (email && email.includes('@')) {
     const domain: string = email.split('@')[1]; // Get the domain part (e.g., gteg.com)
@@ -22,7 +22,7 @@ export const handler = async (event: PostConfirmationTriggerEvent) => {
   }
 
   // Update the user's tenantId attribute
-  const params = {
+  const updateParams = {
     UserPoolId: userPoolId,
     Username: userName,
     UserAttributes: [
@@ -34,10 +34,25 @@ export const handler = async (event: PostConfirmationTriggerEvent) => {
   };
 
   try {
-    await cognito.adminUpdateUserAttributes(params);
+    await cognito.adminUpdateUserAttributes(updateParams);
     console.log(`Set tenantId to ${tenantId} for user ${userName} with email ${email}`);
   } catch (error) {
     console.error(`Error setting tenantId for user ${userName}:`, error);
+    throw error;
+  }
+
+  // Step 2: Assign the user to the Candidates group by default
+  const addGroupParams = {
+    UserPoolId: userPoolId,
+    Username: userName,
+    GroupName: 'Candidates',
+  };
+
+  try {
+    await cognito.adminAddUserToGroup(addGroupParams);
+    console.log(`Assigned user ${userName} to Candidates group`);
+  } catch (error) {
+    console.error(`Error assigning user ${userName} to Candidates group:`, error);
     throw error;
   }
 

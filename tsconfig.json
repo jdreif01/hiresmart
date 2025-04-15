@@ -12,7 +12,10 @@
     "allowSyntheticDefaultImports": true,
     "typeRoots": [
       "./node_modules/@types"
-    ]
+    ],
+    "jsx": "react-jsx", // Add JSX support for React
+    "lib": ["dom", "dom.iterable", "esnext"], // Add browser and modern JS APIs
+    "noEmit": true // Prevent TypeScript from emitting JS files (since Vite handles this)
   },
   "include": [
     "amplify/**/*.ts",

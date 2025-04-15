@@ -39,6 +39,7 @@ export const auth = defineAuth({
       mutable: true
     }
   },
+  groups: ['AppAdmins', 'OrgAdmins', 'HiringManagers', 'Recruiters', 'Interviewers', 'Facilitators', 'Candidates'], // Define groups for all personas
   triggers: {
     postConfirmation: setTenantIdPostAuth
   },
